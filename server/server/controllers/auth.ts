@@ -1,7 +1,7 @@
 import Customer from '../models/customer';
 import { Request, Response } from 'express';
 import { generateTokens } from '../utils/generateTokens';
-import { hashPassword } from '../utils/hashPassword';
+import { hashPassword, comparePassword } from '../utils/hashPassword';
 
 /**
  * @description Register a new customer
@@ -49,7 +49,7 @@ export const register = async (req: Request, res: Response) => {
   return res.status(201).json({
     success: true,
     accessToken,
-    data: newCustomer, // to be removed in production
+    newCustomer, // to be removed in production
   });
 };
 
@@ -60,4 +60,45 @@ export const register = async (req: Request, res: Response) => {
  * @param { email , password } req
  * @returns { success , accesstoken , refreshtoken in cookie } res
  */
-export const login = async (req: Request, res: Response) => {};
+export const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please fill all fields',
+    });
+  }
+
+  const foundCustomer: any = await Customer.findOne({ where: { email } });
+
+  if (!foundCustomer) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid credentials',
+    });
+  }
+
+  const isMatch = await comparePassword(password, foundCustomer.password);
+
+  if (!isMatch) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid credentials',
+    });
+  }
+
+  const { accessToken, refreshToken } = generateTokens(foundCustomer.userId);
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    path: '/api/v1/auth/refresh_token',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  return res.status(200).json({
+    success: true,
+    accessToken,
+    foundCustomer, // to be removed in production
+  });
+};
