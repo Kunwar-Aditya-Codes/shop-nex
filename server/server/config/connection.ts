@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 let sequelize: Sequelize;
+
 if (process.env.NODE_ENV !== 'production') {
   sequelize = new Sequelize('shopnex', 'postgres', 'aditya', {
     host: 'localhost',
