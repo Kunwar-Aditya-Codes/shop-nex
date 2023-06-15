@@ -83,4 +83,28 @@ export const updateProfile = async (req: Request, res: Response) => {
  * @param { userId } req
  * @returns { success  } res
  */
-export const deleteProfile = async (req: Request, res: Response) => {};
+export const deleteProfile = async (req: Request, res: Response) => {
+  const { id } = req;
+
+  if (!id) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid request',
+    });
+  }
+
+  const deletedCustomer = await Customer.destroy({
+    where: { userId: id },
+  });
+
+  if (!deletedCustomer) {
+    return res.status(404).json({
+      success: false,
+      message: 'Customer not found',
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+  });
+};
