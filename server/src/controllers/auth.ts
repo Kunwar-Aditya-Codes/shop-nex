@@ -38,7 +38,10 @@ export const register = async (req: Request, res: Response) => {
     password: hashedPassword,
   });
 
-  const { accessToken, refreshToken } = generateTokens(newCustomer.userId);
+  const { accessToken, refreshToken } = generateTokens({
+    id: newCustomer.userId,
+    role: 'customer',
+  });
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
@@ -88,7 +91,10 @@ export const login = async (req: Request, res: Response) => {
     });
   }
 
-  const { accessToken, refreshToken } = generateTokens(foundCustomer.userId);
+  const { accessToken, refreshToken } = generateTokens({
+    id: foundCustomer.userId,
+    role: 'customer',
+  });
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node  dist/index.js",
-    "dev": "nodemon  server/index.ts"
+    "dev": "nodemon --exec ts-node --files src/index.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

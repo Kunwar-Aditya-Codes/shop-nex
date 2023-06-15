@@ -8,6 +8,7 @@ import { sequelize, startDatabaseConnection } from './config/connection';
 
 // Routes
 import auth from './routes/auth';
+import customer from './routes/customer';
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.get('/', (req: Request, res: Response) => {
 
 /** @description Auth routes */
 app.use('/api/v1/auth', auth);
+/**@description Customer routes */
+app.use('/api/v1/customer', customer);
 
 startDatabaseConnection().then(async () => {
   await sequelize.sync({ alter: true });
