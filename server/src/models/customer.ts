@@ -42,6 +42,12 @@ const Customer = sequelize.define<Model>(
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
+
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     tableName: 'customers',
