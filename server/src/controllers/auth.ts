@@ -162,4 +162,53 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
  * @param { email , otp } req
  * @returns { success } res
  */
-export const verifyEmail = async (req: Request, res: Response) => {};
+export const verifyEmail = async (req: Request, res: Response) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please fill all fields',
+    });
+  }
+
+  const foundVerification: any = await Verification.findOne({
+    where: { email, otp },
+  });
+
+  if (!foundVerification) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid credentials',
+    });
+  }
+
+  const isExpired = new Date(Date.now()) > foundVerification.expiresAt;
+
+  if (isExpired) {
+    await Verification.destroy({
+      where: { email, otp },
+    });
+
+    return res.status(400).json({
+      success: false,
+      message: 'OTP expired',
+    });
+  }
+
+  await Customer.update(
+    { isVerified: true },
+    {
+      where: { email },
+    }
+  );
+
+  await Verification.destroy({
+    where: { email, otp },
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: 'Email verified',
+  });
+};
