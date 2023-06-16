@@ -212,3 +212,40 @@ export const verifyEmail = async (req: Request, res: Response) => {
     message: 'Email verified',
   });
 };
+
+/**
+ * @description Login admin
+ * @access public
+ * @route POST /api/v1/auth/admin/sign_in
+ * @param { email , password } req
+ * @returns { success , accesstoken , refreshtoken in cookie } res
+ */
+export const adminLogin = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (email !== adminEmail || password !== adminPassword) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid credentials',
+    });
+  }
+
+  const { accessToken, refreshToken } = generateTokens({
+    id: '39f0432c-b949-438c-aed6-e4d759f19a76',
+    role: 'admin',
+  });
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    path: '/api/v1/auth/refresh_token',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  return res.status(200).json({
+    success: true,
+    accessToken,
+  });
+};

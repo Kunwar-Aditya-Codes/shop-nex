@@ -21,7 +21,7 @@ const Product = sequelize.define<Model>(
       allowNull: false,
     },
 
-    productPrice: {
+    price: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
@@ -30,11 +30,11 @@ const Product = sequelize.define<Model>(
       type: DataTypes.STRING,
     },
 
-    productCategory: {
+    category: {
       type: DataTypes.ARRAY(DataTypes.STRING),
     },
 
-    productStock: {
+    stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
