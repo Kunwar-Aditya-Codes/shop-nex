@@ -2,7 +2,7 @@ import Customer from '../models/customer';
 import Order from '../models/order';
 import Product from '../models/product';
 import Payment from '../models/payment';
-
+import OrderList from '../models/orderList';
 
 /** @description Customer-Order Association */
 Customer.hasMany(Order, {
@@ -25,13 +25,11 @@ Payment.belongsTo(Customer, {
 });
 
 /** @description Product-Order Association */
-Order.hasMany(Product, {
-  foreignKey: 'productId',
-  sourceKey: 'productId',
+Product.belongsToMany(Order, {
+  through: OrderList,
 });
-Product.belongsTo(Order, {
-  foreignKey: 'productId',
-  targetKey: 'productId',
+Order.belongsToMany(Product, {
+  through: OrderList,
 });
 
 /** @description Customer-Payment Association */

@@ -38,11 +38,6 @@ const Order = sequelize.define<Model>(
       },
     },
 
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
     totalAmount: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -55,21 +50,12 @@ const Order = sequelize.define<Model>(
 
     deliveryDate: {
       type: DataTypes.DATE,
+      defaultValue: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
       allowNull: false,
-    },
-
-    productId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'products',
-        key: 'productId',
-      },
     },
 
     paymentId: {
       type: DataTypes.UUID,
-      allowNull: false,
       references: {
         model: 'payments',
         key: 'paymentId',
