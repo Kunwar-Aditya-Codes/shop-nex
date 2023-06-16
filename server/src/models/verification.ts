@@ -4,13 +4,9 @@ import { sequelize } from '../config/connection';
 const Verification = sequelize.define<Model>(
   'Verification',
   {
-    userId: {
-      type: DataTypes.UUID,
+    email: {
+      type: DataTypes.STRING,
       allowNull: false,
-      references: {
-        model: 'customers',
-        key: 'userId',
-      },
     },
 
     otp: {

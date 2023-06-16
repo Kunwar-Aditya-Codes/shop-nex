@@ -22,6 +22,16 @@ const Payment = sequelize.define<Model>(
       allowNull: false,
     },
 
+    totalAmount: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+
     userId: {
       type: DataTypes.UUID,
       allowNull: false,

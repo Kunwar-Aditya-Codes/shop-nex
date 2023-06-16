@@ -38,15 +38,6 @@ const Order = sequelize.define<Model>(
       },
     },
 
-    productId: {
-      type: DataTypes.ARRAY(DataTypes.UUID),
-      allowNull: false,
-      references: {
-        model: 'products',
-        key: 'productId',
-      },
-    },
-
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -65,6 +56,15 @@ const Order = sequelize.define<Model>(
     deliveryDate: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'products',
+        key: 'productId',
+      },
     },
 
     paymentId: {

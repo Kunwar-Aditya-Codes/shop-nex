@@ -120,7 +120,6 @@ export const login = async (req: Request, res: Response) => {
  * @returns { success } res
  */
 export const sendVerificationEmail = async (req: Request, res: Response) => {
-  const { id } = req;
   const { email } = req.body;
   if (!email) {
     return res.status(400).json({
@@ -130,7 +129,7 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
   }
 
   const foundCustomer: any = await Customer.findOne({
-    where: { email, userId: id },
+    where: { email },
   });
 
   if (!foundCustomer) {
@@ -143,7 +142,7 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
   const otp = optGenerator.generate(6);
 
   await Verification.create({
-    userId: id,
+    email,
     otp,
   });
 

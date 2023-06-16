@@ -1,5 +1,6 @@
 require('express-async-errors');
 require('dotenv').config();
+require('./config/associations');
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
