@@ -118,7 +118,7 @@ export const getAllOrdersForAdmin = async (req: Request, res: Response) => {
 /**
  * @description Update order status
  * @access private
- * @route PUT /api/v1/order/admin/:orderId/update_status
+ * @route PATCH /api/v1/order/admin/:orderId/update_status
  * @param { role, orderId, status } req
  * @returns { success, message } res
  */

@@ -3,6 +3,7 @@ import {
   createOrder,
   getAllOrders,
   getAllOrdersForAdmin,
+  updateOrderStatus,
 } from '../controllers/order';
 import { verifyJwt } from '../middleware/verifyJwt';
 
@@ -13,5 +14,6 @@ router.use(verifyJwt);
 router.post('/:userId/create', createOrder);
 router.get('/:userId/all', getAllOrders);
 router.get('/admin/view_all', getAllOrdersForAdmin);
+router.patch('/admin/:orderId/update_status', updateOrderStatus);
 
 export default router;
