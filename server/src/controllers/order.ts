@@ -6,42 +6,37 @@ import { Request, Response } from 'express';
  * @description Create a new order
  * @access private
  * @route POST /api/v1/order/:userId/create
- * @param { userId, quantity , totalAmount , shippingAddress , productId , paymentId } req
+ * @param { userId , totalAmount , shippingAddress , cartItems  , paymentId } req
  * @returns { success, message, order } res
  */
 export const createOrder = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const { quantity, totalAmount, shippingAddress, productId } = req.body;
+  const { cartItems, totalAmount, shippingAddress } = req.body;
 
-  if (!quantity || !totalAmount || !shippingAddress || !productId || !userId) {
+  if (!totalAmount || !shippingAddress || cartItems.length === 0 || !userId) {
     return res.status(403).json({
       success: false,
       message: 'Please fill all fields',
     });
   }
 
-  const foundProduct: any = await Product.findOne({
-    where: { productId },
-  });
-
-  if (!foundProduct) {
-    return res.status(403).json({
-      success: false,
-      message: 'Product not found',
-    });
-  }
-
   const order: any = await Order.create({
+    userId,
     totalAmount,
     shippingAddress,
-    userId,
   });
 
-  await order.addProduct(foundProduct, {
-    through: {
-      quantity,
-    },
-  });
+  for (const cartItem of cartItems) {
+    const { productId, quantity } = cartItem;
+
+    const foundProduct = await Product.findOne({
+      where: { productId },
+    });
+
+    await order.addProduct(foundProduct, {
+      through: { quantity },
+    });
+  }
 
   return res.status(201).json({
     success: true,
