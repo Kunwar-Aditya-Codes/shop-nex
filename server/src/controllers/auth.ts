@@ -34,7 +34,7 @@ export const register = async (req: Request, res: Response) => {
 
   const hashedPassword = await hashPassword(password);
 
-  const newCustomer: any = await Customer.create({
+  const newCustomer = await Customer.create({
     firstName,
     lastName,
     email,
@@ -76,7 +76,7 @@ export const login = async (req: Request, res: Response) => {
     });
   }
 
-  const foundCustomer: any = await Customer.findOne({ where: { email } });
+  const foundCustomer = await Customer.findOne({ where: { email } });
 
   if (!foundCustomer) {
     return res.status(400).json({
@@ -128,7 +128,7 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
     });
   }
 
-  const foundCustomer: any = await Customer.findOne({
+  const foundCustomer = await Customer.findOne({
     where: { email },
   });
 
@@ -172,7 +172,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
     });
   }
 
-  const foundVerification: any = await Verification.findOne({
+  const foundVerification = await Verification.findOne({
     where: { email, otp },
   });
 

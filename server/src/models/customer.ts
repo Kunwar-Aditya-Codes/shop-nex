@@ -1,7 +1,18 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/connection';
 
-const Customer = sequelize.define<Model>(
+interface CustomerAttributes extends Model {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  profileImage: string;
+  address: string[];
+  isVerified: boolean;
+}
+
+const Customer = sequelize.define<CustomerAttributes>(
   'Customer',
   {
     userId: {

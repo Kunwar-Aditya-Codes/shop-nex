@@ -1,7 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/connection';
 
-const OrderList = sequelize.define<Model>(
+interface OrderListAttributes extends Model {
+  orderListId: string;
+  quantity: number;
+  orderId: string;
+  productId: string;
+}
+
+const OrderList = sequelize.define<OrderListAttributes>(
   'OrderList',
   {
     orderListId: {

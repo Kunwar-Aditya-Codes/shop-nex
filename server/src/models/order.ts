@@ -1,7 +1,18 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/connection';
 
-const Order = sequelize.define<Model>(
+export interface OrderAttributes extends Model {
+  orderId: string;
+  orderDate: Date;
+  orderStatus: string;
+  userId: string;
+  totalAmount: number;
+  shippingAddress: string;
+  deliveryDate: Date;
+  paymentId: string;
+}
+
+const Order = sequelize.define<OrderAttributes>(
   'Order',
   {
     orderId: {

@@ -1,7 +1,13 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/connection';
 
-const Verification = sequelize.define<Model>(
+interface VerificationAttributes extends Model {
+  email: string;
+  otp: string;
+  expiresAt: Date;
+}
+
+const Verification = sequelize.define<VerificationAttributes>(
   'Verification',
   {
     email: {

@@ -1,7 +1,16 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/connection';
 
-const Payment = sequelize.define<Model>(
+interface PaymentAttributes extends Model {
+  paymentId: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  totalAmount: number;
+  userId: string;
+  paymentDate: Date;
+}
+
+const Payment = sequelize.define<PaymentAttributes>(
   'Payment',
   {
     paymentId: {
@@ -24,11 +33,6 @@ const Payment = sequelize.define<Model>(
 
     totalAmount: {
       type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-
-    quantity: {
-      type: DataTypes.INTEGER,
       allowNull: false,
     },
 

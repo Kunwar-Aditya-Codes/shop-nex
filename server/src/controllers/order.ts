@@ -1,6 +1,7 @@
 import Order from '../models/order';
 import Product from '../models/product';
 import { Request, Response } from 'express';
+import { updateStock } from '../utils/updateStock';
 
 /**
  * @description Create a new order
@@ -54,7 +55,7 @@ export const createOrder = async (req: Request, res: Response) => {
 export const getAllOrders = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
-  const orders: any = await Order.findAll({
+  const orders = await Order.findAll({
     where: { userId },
     include: [
       {
@@ -91,7 +92,7 @@ export const getAllOrdersForAdmin = async (req: Request, res: Response) => {
     });
   }
 
-  const orders: any = await Order.findAll({
+  const orders = await Order.findAll({
     include: [
       {
         model: Product,
@@ -102,6 +103,7 @@ export const getAllOrdersForAdmin = async (req: Request, res: Response) => {
       },
     ],
   });
+
 
   return res.status(200).json({
     success: true,
@@ -136,7 +138,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     });
   }
 
-  const order: any = await Order.findOne({
+  const order = await Order.findOne({
     where: { orderId },
   });
 
@@ -147,8 +149,14 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     });
   }
 
-  order.status = status;
+  order.orderStatus = status;
   await order.save();
+
+  if (status === 'DISPATCHED') {
+    await updateStock({
+      orderId,
+    });
+  }
 
   return res.status(200).json({
     success: true,
