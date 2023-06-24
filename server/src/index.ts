@@ -6,6 +6,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 import { sequelize, startDatabaseConnection } from './config/connection';
+import redisClient from './config/redis';
 
 // Routes
 import auth from './routes/auth';
@@ -35,6 +36,9 @@ app.use('/api/v1/order', order);
 
 startDatabaseConnection().then(async () => {
   await sequelize.sync({ alter: true });
+
+  await redisClient.connect();
+
   app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
   });

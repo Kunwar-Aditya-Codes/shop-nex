@@ -1,3 +1,4 @@
+import redisClient from '../config/redis';
 import Product from '../models/product';
 import { Request, Response } from 'express';
 
@@ -43,6 +44,8 @@ export const createProduct = async (req: Request, res: Response) => {
     category,
   });
 
+  await redisClient.del('products');
+
   return res.status(201).json({
     success: true,
     message: 'Product created successfully',
@@ -57,13 +60,32 @@ export const createProduct = async (req: Request, res: Response) => {
  * @returns { success, message, products } res
  */
 export const getAllProducts = async (req: Request, res: Response) => {
-  const products = await Product.findAll();
+  const cachedProducts = await redisClient.get('products');
 
-  return res.status(200).json({
-    success: true,
-    message: 'Products fetched successfully',
-    products,
-  });
+  if (cachedProducts) {
+    return res.status(200).json({
+      success: true,
+      message: 'Products fetched successfully from cache',
+      products: JSON.parse(cachedProducts),
+    });
+  } else {
+    const products = await Product.findAll();
+
+    if (!products) {
+      return res.status(404).json({
+        success: false,
+        message: 'No products found',
+      });
+    }
+
+    await redisClient.set('products', JSON.stringify(products));
+
+    return res.status(200).json({
+      success: true,
+      message: 'Products fetched successfully',
+      products,
+    });
+  }
 };
 
 /**
