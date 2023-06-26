@@ -1,8 +1,14 @@
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+
 function App() {
   return (
-    <main className=' flex h-screen items-center justify-center bg-zinc-900 text-4xl font-bold uppercase tracking-wider text-white '>
-      <h1 className=''>Shop Next</h1>
-    </main>
+    <Routes>
+      <Route path='/' element={<Layout />}>
+        <Route index element={<Home />} />
+      </Route>
+    </Routes>
   );
 }
 
