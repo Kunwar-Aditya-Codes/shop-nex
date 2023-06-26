@@ -18,10 +18,10 @@ export const getProfile = async (req: Request, res: Response) => {
     });
   }
 
-  const foundCustomer = await Customer.findOne({
-    where: { userId: id },
-    attributes: { exclude: ['password'] },
-  });
+  const foundCustomer = await Customer.findById(id)
+    .select('-password')
+    .lean()
+    .exec();
 
   if (!foundCustomer) {
     return res.status(404).json({
@@ -53,26 +53,18 @@ export const updateProfile = async (req: Request, res: Response) => {
     });
   }
 
-  const updatedCustomer = await Customer.update(
-    { ...req.body },
-    { where: { userId: id } }
-  );
+  // const updatedCustomer = await Customer.update(
+  //   { ...req.body },
+  //   { where: { userId: id } }
+  // );
 
-  if (!updatedCustomer) {
-    return res.status(404).json({
-      success: false,
-      message: 'Customer not found',
-    });
-  }
-
-  const foundCustomer = await Customer.findOne({
-    where: { userId: id },
-    attributes: { exclude: ['password'] },
+  const updatedCustomer = await Customer.findByIdAndUpdate(id, {
+    ...req.body,
   });
 
   return res.status(200).json({
     success: true,
-    customer: foundCustomer,
+    customer: updatedCustomer,
   });
 };
 
@@ -93,9 +85,7 @@ export const deleteProfile = async (req: Request, res: Response) => {
     });
   }
 
-  const deletedCustomer = await Customer.destroy({
-    where: { userId: id },
-  });
+  const deletedCustomer = await Customer.findByIdAndDelete(id);
 
   if (!deletedCustomer) {
     return res.status(404).json({

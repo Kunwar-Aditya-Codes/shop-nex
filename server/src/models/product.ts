@@ -1,8 +1,6 @@
-import { sequelize } from '../config/connection';
-import { DataTypes, Model } from 'sequelize';
+import mongoose, { Schema } from 'mongoose';
 
-export interface ProductAttributes extends Model {
-  productId: string;
+export interface ProductAttributes extends Schema {
   productName: string;
   productDescription: string;
   price: number;
@@ -10,54 +8,39 @@ export interface ProductAttributes extends Model {
   category: string[];
   stock: number;
   variants: string[];
+  orders: mongoose.Schema.Types.ObjectId[];
 }
 
-const Product = sequelize.define<ProductAttributes>(
-  'Product',
+const productSchema = new mongoose.Schema<ProductAttributes>(
   {
-    productId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
-
     productName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     productDescription: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
+      type: Number,
+      required: true,
     },
 
     productImage: {
-      type: DataTypes.STRING,
+      type: String,
     },
 
     category: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
-
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    variants: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: [String],
     },
   },
   {
-    tableName: 'products',
     timestamps: true,
   }
 );
+
+const Product = mongoose.model('Product', productSchema);
 
 export default Product;

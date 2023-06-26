@@ -1,8 +1,6 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/connection';
+import mongoose, { Schema } from "mongoose";
 
-interface CustomerAttributes extends Model {
-  userId: string;
+export interface CustomerAttributes extends Schema {
   firstName: string;
   lastName: string;
   email: string;
@@ -12,58 +10,57 @@ interface CustomerAttributes extends Model {
   isVerified: boolean;
 }
 
-const Customer = sequelize.define<CustomerAttributes>(
-  'Customer',
+const customerSchema = new mongoose.Schema<CustomerAttributes>(
   {
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
-
     firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
+      trim: true,
+      min: 3,
+      max: 20,
     },
 
     lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
+      trim: true,
+      min: 3,
+      max: 20,
     },
 
     email: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
+      trim: true,
       unique: true,
     },
 
     password: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     profileImage: {
-      type: DataTypes.STRING,
-      defaultValue:
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+      type: String,
+      default:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
     },
 
     address: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
+      type: [String],
+      required: true,
     },
 
     isVerified: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
+      type: Boolean,
+      default: false,
     },
   },
   {
-    tableName: 'customers',
     timestamps: true,
   }
 );
+
+const Customer = mongoose.model("Customer", customerSchema);
 
 export default Customer;

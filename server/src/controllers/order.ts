@@ -1,47 +1,37 @@
 import Order from '../models/order';
-import Product from '../models/product';
 import { Request, Response } from 'express';
-import { updateStock } from '../utils/updateStock';
 
 /**
  * @description Create a new order
  * @access private
  * @route POST /api/v1/order/:userId/create
- * @param { userId , totalAmount , shippingAddress , cartItems  , paymentId } req
+ * @param { userId , totalAmount , shippingAddress , orderItems  , paymentId } req
  * @returns { success, message, order } res
  */
 export const createOrder = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const { cartItems, totalAmount, shippingAddress } = req.body;
+  const { orderItems, totalAmount, shippingAddress } = req.body;
 
-  if (!totalAmount || !shippingAddress || cartItems.length === 0 || !userId) {
+  if (!totalAmount || !shippingAddress || orderItems.length === 0 || !userId) {
     return res.status(403).json({
       success: false,
       message: 'Please fill all fields',
     });
   }
 
-  const order: any = await Order.create({
-    userId,
+  const order = await Order.create({
+    customerId: userId,
     totalAmount,
+    orderStatus: 'PENDING',
     shippingAddress,
+    deliveryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
+    orderItems,
   });
-
-  for (const cartItem of cartItems) {
-    const { productId, quantity } = cartItem;
-
-    const foundProduct = await Product.findOne({
-      where: { productId },
-    });
-
-    await order.addProduct(foundProduct, {
-      through: { quantity },
-    });
-  }
 
   return res.status(201).json({
     success: true,
     message: 'Order created successfully',
+    order,
   });
 };
 
@@ -55,18 +45,12 @@ export const createOrder = async (req: Request, res: Response) => {
 export const getAllOrders = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
-  const orders = await Order.findAll({
-    where: { userId },
-    include: [
-      {
-        model: Product,
-        attributes: ['productId', 'productName'],
-        through: {
-          attributes: ['quantity'],
-        },
-      },
-    ],
-  });
+  const orders = await Order.findOne({
+    customerId: userId,
+  })
+    .populate('orderItems')
+    .lean()
+    .exec();
 
   return res.status(200).json({
     success: true,
@@ -92,17 +76,7 @@ export const getAllOrdersForAdmin = async (req: Request, res: Response) => {
     });
   }
 
-  const orders = await Order.findAll({
-    include: [
-      {
-        model: Product,
-        attributes: ['productId', 'productName'],
-        through: {
-          attributes: ['quantity'],
-        },
-      },
-    ],
-  });
+  const orders = await Order.find({}).populate('orderItems').lean().exec();
 
   return res.status(200).json({
     success: true,
@@ -137,23 +111,20 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     });
   }
 
-  const order = await Order.findOne({
-    where: { orderId },
-  });
+  const updatedOrder = await Order.findByIdAndUpdate(
+    orderId,
+    {
+      orderStatus: status,
+    },
+    { new: true }
+  )
+    .lean()
+    .exec();
 
-  if (!order) {
-    return res.status(403).json({
+  if (!updatedOrder) {
+    return res.status(404).json({
       success: false,
       message: 'Order not found',
-    });
-  }
-
-  order.orderStatus = status;
-  await order.save();
-
-  if (status === 'DISPATCHED') {
-    await updateStock({
-      orderId,
     });
   }
 

@@ -1,35 +1,34 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/connection';
+import mongoose, { Schema } from 'mongoose';
 
-interface VerificationAttributes extends Model {
+export interface VerificationAttributes extends Schema {
   email: string;
   otp: string;
   expiresAt: Date;
 }
 
-const Verification = sequelize.define<VerificationAttributes>(
-  'Verification',
+const verificationSchema = new mongoose.Schema<VerificationAttributes>(
   {
     email: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     otp: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     expiresAt: {
-      type: DataTypes.DATE,
+      type: Date,
       allowNull: false,
       defaultValue: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
     },
   },
   {
-    tableName: 'verifications',
     timestamps: true,
   }
 );
+
+const Verification = mongoose.model('Verification', verificationSchema);
 
 export default Verification;

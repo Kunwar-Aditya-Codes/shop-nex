@@ -1,82 +1,67 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/connection';
+import mongoose, { Schema } from 'mongoose';
 
-export interface OrderAttributes extends Model {
-  orderId: string;
+export interface OrderAttributes extends Schema {
   orderDate: Date;
   orderStatus: string;
-  userId: string;
+  customerId: mongoose.Schema.Types.ObjectId;
   totalAmount: number;
   shippingAddress: string;
   deliveryDate: Date;
-  paymentId: string;
+  orderItems: mongoose.Schema.Types.ObjectId[];
+  // paymentId: mongoose.Schema.Types.ObjectId;
 }
 
-const Order = sequelize.define<OrderAttributes>(
-  'Order',
+const orderSchema = new mongoose.Schema<OrderAttributes>(
   {
-    orderId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
+    orderDate: {
+      type: Date,
+      required: true,
+      default: Date.now,
     },
 
-    orderDate: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
-    },
+    orderItems: [
+      { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    ],
 
     orderStatus: {
-      type: DataTypes.ENUM(
-        'PENDING',
-        'DISPATCHED',
-        'SHIPPED',
-        'OUT_FOR_DELIVERY',
-        'DELIVERED'
-      ),
-      defaultValue: 'PENDING',
-      allowNull: false,
+      type: String,
+      enum: ['PENDING', 'DELIVERED', 'DISPATCHED', 'CANCELLED'],
+      default: 'PENDING',
+      required: true,
     },
 
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'customers',
-        key: 'userId',
-      },
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Customer',
+      required: true,
     },
 
     totalAmount: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
+      type: Number,
+      required: true,
     },
 
     shippingAddress: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     deliveryDate: {
-      type: DataTypes.DATE,
-      defaultValue: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
-      allowNull: false,
+      type: Date,
+      required: true,
     },
 
-    paymentId: {
-      type: DataTypes.UUID,
-      references: {
-        model: 'payments',
-        key: 'paymentId',
-      },
-    },
+    // paymentId: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'Payment',
+    //   required: true,
+    // },
   },
   {
-    tableName: 'orders',
     timestamps: true,
   }
 );
+
+const Order = mongoose.model('Order', orderSchema);
 
 export default Order;

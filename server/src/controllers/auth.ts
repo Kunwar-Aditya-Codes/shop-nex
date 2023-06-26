@@ -23,7 +23,7 @@ export const register = async (req: Request, res: Response) => {
     });
   }
 
-  const foundCustomer = await Customer.findOne({ where: { email } });
+  const foundCustomer = await Customer.findOne({ email }).lean().exec();
 
   if (foundCustomer) {
     return res.status(400).json({
@@ -42,7 +42,7 @@ export const register = async (req: Request, res: Response) => {
   });
 
   const { accessToken, refreshToken } = generateTokens({
-    id: newCustomer.userId,
+    id: newCustomer._id.toString(),
     role: 'customer',
   });
 
@@ -76,7 +76,7 @@ export const login = async (req: Request, res: Response) => {
     });
   }
 
-  const foundCustomer = await Customer.findOne({ where: { email } });
+  const foundCustomer = await Customer.findOne({ email }).lean().exec();
 
   if (!foundCustomer) {
     return res.status(400).json({
@@ -95,7 +95,7 @@ export const login = async (req: Request, res: Response) => {
   }
 
   const { accessToken, refreshToken } = generateTokens({
-    id: foundCustomer.userId,
+    id: foundCustomer._id.toString(),
     role: 'customer',
   });
 
@@ -129,8 +129,10 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
   }
 
   const foundCustomer = await Customer.findOne({
-    where: { email },
-  });
+    email,
+  })
+    .lean()
+    .exec();
 
   if (!foundCustomer) {
     return res.status(400).json({
@@ -173,7 +175,8 @@ export const verifyEmail = async (req: Request, res: Response) => {
   }
 
   const foundVerification = await Verification.findOne({
-    where: { email, otp },
+    email,
+    otp,
   });
 
   if (!foundVerification) {
@@ -186,8 +189,9 @@ export const verifyEmail = async (req: Request, res: Response) => {
   const isExpired = new Date(Date.now()) > foundVerification.expiresAt;
 
   if (isExpired) {
-    await Verification.destroy({
-      where: { email, otp },
+    await Verification.deleteOne({
+      email,
+      otp,
     });
 
     return res.status(400).json({
@@ -196,15 +200,17 @@ export const verifyEmail = async (req: Request, res: Response) => {
     });
   }
 
-  await Customer.update(
-    { isVerified: true },
+  await Customer.findOneAndUpdate(
     {
-      where: { email },
-    }
+      email,
+    },
+    { isVerified: true },
+    { new: true }
   );
 
-  await Verification.destroy({
-    where: { email, otp },
+  await Verification.deleteOne({
+    email,
+    otp,
   });
 
   return res.status(200).json({

@@ -1,60 +1,48 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/connection';
+import mongoose, { Schema } from 'mongoose';
 
-interface PaymentAttributes extends Model {
+export interface PaymentAttributes extends Schema {
   paymentId: string;
   paymentMethod: string;
   paymentStatus: string;
   totalAmount: number;
-  userId: string;
+  customerId: mongoose.Schema.Types.ObjectId;
   paymentDate: Date;
 }
 
-const Payment = sequelize.define<PaymentAttributes>(
-  'Payment',
+const paymentSchema = new mongoose.Schema<PaymentAttributes>(
   {
-    paymentId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
-
     paymentMethod: {
-      type: DataTypes.ENUM('CARD', 'UPI'),
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     paymentStatus: {
-      type: DataTypes.ENUM('SUCCESS', 'FAILED', 'PENDING'),
-      defaultValue: 'PENDING',
-      allowNull: false,
+      type: String,
+      required: true,
     },
 
     totalAmount: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
+      type: Number,
+      required: true,
     },
 
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'customers',
-        key: 'userId',
-      },
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Customer',
+      required: true,
     },
 
     paymentDate: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
+      type: Date,
+      required: true,
+      default: Date.now,
     },
   },
   {
-    tableName: 'payments',
     timestamps: true,
   }
 );
+
+const Payment = mongoose.model('Payment', paymentSchema);
 
 export default Payment;

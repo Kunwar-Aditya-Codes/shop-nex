@@ -1,4 +1,3 @@
-import redisClient from '../config/redis';
 import Product from '../models/product';
 import { Request, Response } from 'express';
 
@@ -6,7 +5,7 @@ import { Request, Response } from 'express';
  * @description Create a new product
  * @access private
  * @route POST /api/v1/product/admin/create
- * @param { productName, productDescription, price, stock, variants, category, image } req
+ * @param { productName, productDescription, price, category, image } req
  * @returns { success, message, product } res
  */
 export const createProduct = async (req: Request, res: Response) => {
@@ -24,8 +23,7 @@ export const createProduct = async (req: Request, res: Response) => {
     productDescription,
     price = 0.0,
     stock = 0,
-    variants = [],
-    category = [],
+    category,
   } = req.body;
 
   if (!productName || !productDescription) {
@@ -40,11 +38,8 @@ export const createProduct = async (req: Request, res: Response) => {
     productDescription,
     price,
     stock,
-    variants,
     category,
   });
-
-  await redisClient.del('products');
 
   return res.status(201).json({
     success: true,
@@ -60,32 +55,20 @@ export const createProduct = async (req: Request, res: Response) => {
  * @returns { success, message, products } res
  */
 export const getAllProducts = async (req: Request, res: Response) => {
-  const cachedProducts = await redisClient.get('products');
+  const products = await Product.find({}).lean().exec();
 
-  if (cachedProducts) {
-    return res.status(200).json({
-      success: true,
-      message: 'Products fetched successfully from cache',
-      products: JSON.parse(cachedProducts),
-    });
-  } else {
-    const products = await Product.findAll();
-
-    if (!products) {
-      return res.status(404).json({
-        success: false,
-        message: 'No products found',
-      });
-    }
-
-    await redisClient.set('products', JSON.stringify(products));
-
-    return res.status(200).json({
-      success: true,
-      message: 'Products fetched successfully',
-      products,
+  if (!products) {
+    return res.status(404).json({
+      success: false,
+      message: 'No products found',
     });
   }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Products fetched successfully',
+    products,
+  });
 };
 
 /**
@@ -98,11 +81,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
 export const getSingleProduct = async (req: Request, res: Response) => {
   const { productId } = req.params;
 
-  const product = await Product.findOne({
-    where: {
-      productId,
-    },
-  });
+  const product = await Product.findById(productId).lean().exec();
 
   if (!product) {
     return res.status(404).json({
@@ -137,10 +116,9 @@ export const updateProduct = async (req: Request, res: Response) => {
 
   const { productId } = req.params;
 
-  const updatedProduct = await Product.update(
-    { ...req.body },
-    { where: { productId } }
-  );
+  const updatedProduct = await Product.findByIdAndUpdate(productId, {
+    ...req.body,
+  });
 
   if (!updatedProduct) {
     return res.status(404).json({
@@ -174,11 +152,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
   const { productId } = req.params;
 
-  const deletedProduct = await Product.destroy({
-    where: {
-      productId,
-    },
-  });
+  const deletedProduct = await Product.findByIdAndDelete(productId);
 
   if (!deletedProduct) {
     return res.status(404).json({
