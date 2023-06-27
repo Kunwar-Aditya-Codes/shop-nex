@@ -12,7 +12,7 @@ const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-[10000] h-[4rem] w-full border-b border-b-zinc-900 bg-[#09090b] ">
+    <div className="fixed left-0 right-0 top-0 z-[10000] h-[4rem] w-full overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b] ">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4">
         {/* Left */}
         <div className="flex items-center space-x-4">
