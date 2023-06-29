@@ -5,7 +5,7 @@ import {
 } from "react-icons/ai";
 const Footer = () => {
   return (
-    <div className="grid grid-cols-1 justify-items-center gap-y-8 bg-zinc-900 px-4 py-8 text-sm md:grid-cols-3">
+    <div className="grid h-full grid-cols-1 justify-items-center gap-y-8 bg-zinc-900 px-4 py-8 text-sm md:grid-cols-3">
       <div className="flex flex-col items-center space-y-2">
         <h1 className="w-full  text-center text-lg font-semibold text-white lg:text-start">
           Get to know us

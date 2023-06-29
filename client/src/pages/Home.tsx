@@ -7,7 +7,7 @@ import ProductCard from "../components/ProductCard";
 
 const Home = () => {
   return (
-    <div className="">
+    <div className="pb-12">
       <div className=" relative  mb-16">
         <div
           className="

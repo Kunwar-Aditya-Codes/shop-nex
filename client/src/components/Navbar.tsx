@@ -81,9 +81,11 @@ const Navbar = () => {
             <button className=" rounded-md border border-zinc-900 p-2 hover:bg-zinc-900">
               <IoCartOutline />
             </button>
-            <button className="rounded-md bg-white p-2 text-xs font-medium tracking-wider text-black">
-              Sign In
-            </button>
+            <Link to="/sign_in">
+              <button className="rounded-md bg-white p-2 text-xs font-medium tracking-wider text-black">
+                Sign In
+              </button>
+            </Link>
           </div>
         </div>
       </div>
