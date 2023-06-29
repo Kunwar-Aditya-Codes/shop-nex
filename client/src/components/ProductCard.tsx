@@ -28,7 +28,7 @@ const ProductCard = ({ image, name, rating, price }: ProductCardProps) => {
         </div>
         <h1 className=" font-light uppercase tracking-wider">${price}</h1>
       </div>
-      <button className="w-full rounded-b-sm bg-white/75 py-2 font-bold uppercase tracking-wider text-black transition ease-out hover:bg-white">
+      <button className="w-full rounded-b-sm bg-white/75 py-2  tracking-wide text-black transition ease-out hover:bg-white">
         Add to cart
       </button>
     </div>

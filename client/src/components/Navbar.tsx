@@ -12,8 +12,8 @@ const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-[10000] h-[4rem] w-full overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b] ">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4">
+    <div className="fixed left-0 right-0 top-0 z-[10000] h-[4rem] w-full overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b]   ">
+      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 ">
         {/* Left */}
         <div className="flex items-center space-x-4">
           <button
@@ -36,9 +36,6 @@ const Navbar = () => {
           <ul className="flex items-center justify-center space-x-8">
             <li className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900">
               Products
-            </li>
-            <li className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900">
-              Clothing
             </li>
             <li className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900">
               Brands
@@ -66,9 +63,6 @@ const Navbar = () => {
               <ul className="flex flex-col items-center justify-center  space-y-8">
                 <li className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900">
                   Products
-                </li>
-                <li className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900">
-                  Clothing
                 </li>
                 <li className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900">
                   Brands
