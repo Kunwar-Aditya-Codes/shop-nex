@@ -4,14 +4,36 @@ import { useState } from "react";
 
 const Login = () => {
   const [show, setShow] = useState(false);
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="flex flex-grow items-center justify-center">
       <div className="flex w-full max-w-xl flex-col items-center justify-center px-4">
-        <form className="flex w-full flex-col space-y-8 rounded-xl  px-4 text-lg md:p-10 ">
+        <form
+          onSubmit={handleSubmit}
+          className="flex w-full flex-col space-y-8 rounded-xl  px-4 text-lg md:p-10 "
+        >
           <input
             type="email"
             placeholder="Email"
+            value={data.email}
+            name="email"
+            onChange={handleInput}
             autoFocus
             required
             className="rounded-md border border-zinc-900 bg-transparent px-4 py-3 text-sm tracking-wide outline-none focus:border-white"
@@ -21,9 +43,12 @@ const Login = () => {
             <input
               type={show ? "text" : "password"}
               placeholder="Password"
+              value={data.password}
+              name="password"
+              onChange={handleInput}
               className="w-full rounded-md border border-zinc-900 bg-transparent px-4 py-3 text-sm tracking-wide outline-none focus:border-white"
             />
-            <div className="absolute right-4">
+            <div className="absolute right-4  cursor-pointer">
               {show ? (
                 <AiOutlineEyeInvisible
                   onClick={() => setShow(!show)}
