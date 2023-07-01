@@ -89,7 +89,12 @@ const Register = () => {
               )}
             </div>
           </div>
-          <button className="rounded-md bg-white/75 py-2 font-light uppercase tracking-wider text-black outline-none disabled:bg-zinc-900 disabled:text-white ">
+          <button
+            disabled={
+              !data.email || !data.password || !data.firstName || !data.lastName
+            }
+            className="rounded-md bg-white/75 py-2 font-light uppercase tracking-wider text-black outline-none disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-700 "
+          >
             Sign Up
           </button>
         </form>
