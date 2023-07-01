@@ -5,6 +5,7 @@ type Props = {
   quantity: number;
   productImage: string;
 };
+
 const CartCard = ({
   price,
   productId,
@@ -18,7 +19,7 @@ const CartCard = ({
         <img
           src={productImage}
           alt={productName}
-          className="h-full w-full rounded-md object-cover "
+          className="h-full w-full rounded-md object-cover"
         />
       </div>
       <div className="flex flex-col items-start space-y-4">
