@@ -36,7 +36,7 @@ const Login = () => {
             onChange={handleInput}
             autoFocus
             required
-            className="rounded-md border border-zinc-900 bg-transparent px-4 py-3 text-sm tracking-wide outline-none focus:border-white"
+            className="rounded-md border border-zinc-900 bg-transparent px-4 py-3 text-sm tracking-wide outline-none placeholder:text-zinc-700 focus:border-white"
           />
 
           <div className="relative flex items-center">
@@ -46,18 +46,18 @@ const Login = () => {
               value={data.password}
               name="password"
               onChange={handleInput}
-              className="w-full rounded-md border border-zinc-900 bg-transparent px-4 py-3 text-sm tracking-wide outline-none focus:border-white"
+              className="w-full rounded-md border border-zinc-900 bg-transparent px-4 py-3 text-sm tracking-wide outline-none placeholder:text-zinc-700 focus:border-white"
             />
             <div className="absolute right-4  cursor-pointer">
               {show ? (
                 <AiOutlineEyeInvisible
                   onClick={() => setShow(!show)}
-                  className="h-6 w-6"
+                  className="h-6 w-6 text-white"
                 />
               ) : (
                 <AiOutlineEye
                   onClick={() => setShow(!show)}
-                  className="h-6 w-6"
+                  className="h-6 w-6 text-zinc-700"
                 />
               )}
             </div>
