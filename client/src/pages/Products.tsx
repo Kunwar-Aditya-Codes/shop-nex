@@ -22,7 +22,7 @@ const Products = () => {
         </button>
       </div>
       {/* Products */}
-      <div className="mt-10 grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:justify-items-start">
         {allProducts.map((product) => (
           <ProductCard
             key={product.id}

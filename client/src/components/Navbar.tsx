@@ -34,12 +34,15 @@ const Navbar = () => {
         {/* Middle */}
         <div className={`hidden lg:flex`}>
           <ul className="flex items-center justify-center space-x-8">
-            <li className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900">
+            <Link
+              to="/products"
+              className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900"
+            >
               Products
-            </li>
-            <li className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900">
+            </Link>
+            <Link to="/product_brands" className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900">
               Brands
-            </li>
+            </Link>
           </ul>
         </div>
 
@@ -61,9 +64,12 @@ const Navbar = () => {
 
             <div className="mt-16">
               <ul className="flex flex-col items-center justify-center  space-y-8">
-                <li className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900">
+                <Link
+                  to="/products"
+                  className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900"
+                >
                   Products
-                </li>
+                </Link>
                 <li className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900">
                   Brands
                 </li>
