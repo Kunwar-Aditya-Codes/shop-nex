@@ -1,9 +1,10 @@
 import { useBoundStore } from "../app/store";
 import CartCard from "../components/CartCard";
-import { cartCardData } from "../misc/cartCardData";
 
 const Cart = () => {
   const cartItems = useBoundStore((state) => state.products);
+  const totalItems = useBoundStore((state) => state.totalItems);
+  const totalAmount = useBoundStore((state) => state.totalAmount);
 
   return (
     <div className="mx-auto flex h-full w-full max-w-7xl flex-grow flex-col items-center space-y-8 p-6 lg:flex-row-reverse lg:items-start lg:space-y-0">
@@ -13,12 +14,15 @@ const Cart = () => {
             Cart Summary
           </h1>
           <p className="text-start  font-light tracking-wider">
-            Total Items: <span className="">10</span>
+            Total Items: <span className="">{totalItems}</span>
           </p>
           <p className="text-start  font-light tracking-wider">
-            Total Amount: <span className=""> $100</span>
+            Total Amount: <span className=""> ${totalAmount}</span>
           </p>
-          <button className="rounded-md bg-white/75 py-2 font-medium uppercase tracking-wider text-black transition ease-out hover:bg-white">
+          <button
+            disabled={totalAmount === 0}
+            className="rounded-md bg-white/75 py-2 font-medium uppercase tracking-wider text-black transition ease-out hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-800"
+          >
             Process to pay
           </button>
         </div>
@@ -29,6 +33,7 @@ const Cart = () => {
             <CartCard
               price={product.price}
               key={product.id}
+              rating={product.rating}
               productId={product.id}
               productImage={product.image}
               productName={product.name}
