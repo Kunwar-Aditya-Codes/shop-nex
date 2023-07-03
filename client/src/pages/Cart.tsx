@@ -1,7 +1,10 @@
+import { useBoundStore } from "../app/store";
 import CartCard from "../components/CartCard";
 import { cartCardData } from "../misc/cartCardData";
 
 const Cart = () => {
+  const cartItems = useBoundStore((state) => state.products);
+
   return (
     <div className="mx-auto flex h-full w-full max-w-7xl flex-grow flex-col items-center space-y-8 p-6 lg:flex-row-reverse lg:items-start lg:space-y-0">
       <div className="flex w-full items-center justify-center lg:flex-[0.5]  lg:justify-end">
@@ -21,16 +24,20 @@ const Cart = () => {
         </div>
       </div>
       <div className="grid w-full grid-cols-1 divide-y-2 divide-zinc-900 lg:flex-[0.5] ">
-        {cartCardData?.map((product) => (
-          <CartCard
-            price={product.price}
-            key={product.id}
-            productId={product.id}
-            productImage={product.image}
-            productName={product.productName}
-            quantity={product.quantity}
-          />
-        ))}
+        {cartItems.length > 0 ? (
+          cartItems?.map((product) => (
+            <CartCard
+              price={product.price}
+              key={product.id}
+              productId={product.id}
+              productImage={product.image}
+              productName={product.name}
+              quantity={product.quantity}
+            />
+          ))
+        ) : (
+          <h1>Empty Cart</h1>
+        )}
       </div>
     </div>
   );

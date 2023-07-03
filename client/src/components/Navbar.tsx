@@ -7,9 +7,11 @@ import {
 import { useState } from "react";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
+import { useBoundStore } from "../app/store";
 
 const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const numberOfCartItems = useBoundStore((state) => state.totalItems);
 
   return (
     <div className="fixed left-0 right-0 top-0 z-[10000] h-[4rem] w-full overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b]   ">
@@ -40,7 +42,10 @@ const Navbar = () => {
             >
               Products
             </Link>
-            <Link to="/product_brands" className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900">
+            <Link
+              to="/product_brands"
+              className="cursor-pointer rounded-md px-3 py-2 transition ease-out hover:bg-zinc-900"
+            >
               Brands
             </Link>
           </ul>
@@ -89,8 +94,8 @@ const Navbar = () => {
               className="relative rounded-md border border-zinc-900 p-2 hover:bg-zinc-900"
             >
               <IoCartOutline />
-              <p className="absolute -right-1 -top-1 rounded-full bg-white px-1 text-xs text-black">
-                2
+              <p className="absolute -right-1 -top-1 rounded-full bg-white px-1 text-[0.6rem] text-black">
+                {numberOfCartItems}
               </p>
             </Link>
             <Link to="/sign_in">

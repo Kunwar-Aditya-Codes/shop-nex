@@ -1,5 +1,5 @@
 type Props = {
-  productId: string;
+  productId: number;
   productName: string;
   price: number;
   quantity: number;
