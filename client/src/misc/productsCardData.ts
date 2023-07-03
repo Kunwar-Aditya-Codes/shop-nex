@@ -42,7 +42,7 @@ export const allProducts = [
     price: 100,
     image:
       "https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2xvdGhlfGVufDB8MHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60",
-    rating: 4,
+    rating: 2,
   },
   {
     id: 2,
