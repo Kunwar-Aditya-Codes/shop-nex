@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useState } from "react";
 import { z } from "zod";
 import { register } from "../lib/validations/authSchema";
+import { axiosInstance } from "../lib/api/axiosConfig";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 type RegisterData = z.infer<typeof register>;
 
@@ -15,6 +18,8 @@ const Register = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setData((prev) => ({
@@ -25,6 +30,60 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    toast.loading("Registering...", { id: "register" });
+
+    const { email, firstName, lastName, password } = data;
+
+    if (!email || !firstName || !lastName || !password) {
+      toast.error("All fields required!", { id: "register" });
+      return;
+    }
+
+    try {
+      const validatedInput = register.parse({
+        ...data,
+      });
+
+      console.log(validatedInput);
+
+      const response = await axiosInstance.post("/auth/sign_up", {
+        ...validatedInput,
+      });
+
+      console.log(response.data.accessToken);
+
+      toast.success("Success", {
+        id: "register",
+      });
+
+      setData({
+        email: "",
+        firstName: "",
+        lastName: "",
+        password: "",
+      });
+
+      navigate("/products");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        error.errors.forEach((err) => {
+          const { message, path } = err;
+          const errorMessage =
+            path.length > 0 ? `${path[0]}: ${message}` : message;
+          toast.error(errorMessage, {
+            id: "register",
+          });
+        });
+      }
+
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message, {
+          id: "register",
+        });
+        return;
+      }
+    }
   };
 
   return (

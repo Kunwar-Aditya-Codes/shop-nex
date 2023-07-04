@@ -14,7 +14,7 @@ const Navbar = () => {
   const numberOfCartItems = useBoundStore((state) => state.totalItems);
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-[10000] h-[4rem] w-full overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b]   ">
+    <div className="fixed left-0 right-0 top-0 z-[100] h-[4rem] w-full overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b]   ">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 ">
         {/* Left */}
         <div className="flex items-center space-x-4">
@@ -70,14 +70,19 @@ const Navbar = () => {
             <div className="mt-16">
               <ul className="flex flex-col items-center justify-center  space-y-8">
                 <Link
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/products"
                   className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900"
                 >
                   Products
                 </Link>
-                <li className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900">
+                <Link
+                  to="/product_brands"
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  className="w-[90%] cursor-pointer rounded-md px-2  py-2 text-center transition duration-200 ease-out hover:bg-zinc-900"
+                >
                   Brands
-                </li>
+                </Link>
               </ul>
             </div>
           </div>
