@@ -6,6 +6,7 @@ import { register } from "../lib/validations/authSchema";
 import { axiosInstance } from "../lib/api/axiosConfig";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
+import { useBoundStore } from "../app/store";
 
 type RegisterData = z.infer<typeof register>;
 
@@ -17,6 +18,8 @@ const Register = () => {
     lastName: "",
     password: "",
   });
+
+  const setToken = useBoundStore((state) => state.setToken);
 
   const navigate = useNavigate();
 
@@ -51,7 +54,7 @@ const Register = () => {
         ...validatedInput,
       });
 
-      console.log(response.data.accessToken);
+      setToken(response.data.accessToken);
 
       toast.success("Success", {
         id: "register",
