@@ -48,8 +48,6 @@ const Register = () => {
         ...data,
       });
 
-      console.log(validatedInput);
-
       const response = await axiosInstance.post("/auth/sign_up", {
         ...validatedInput,
       });

@@ -1,6 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useState } from "react";
+import { useBoundStore } from "../app/store";
+import { toast } from "react-hot-toast";
+import { axiosInstance } from "../lib/api/axiosConfig";
+import { z } from "zod";
+import { AxiosError } from "axios";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -8,6 +13,10 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+
+  const setToken = useBoundStore((state) => state.setToken);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -19,6 +28,39 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    toast.loading("Login...", { id: "login" });
+
+    if (!data.email || !data.password) {
+      toast.error("All fields required!", { id: "login" });
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post("/auth/login", {
+        ...data,
+      });
+
+      setToken(response.data.accessToken);
+
+      toast.success("Success", {
+        id: "login",
+      });
+
+      setData({
+        email: "",
+        password: "",
+      });
+
+      navigate("/products");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message, {
+          id: "login",
+        });
+        return;
+      }
+    }
   };
 
   return (
