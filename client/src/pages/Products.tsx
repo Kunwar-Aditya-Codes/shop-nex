@@ -2,7 +2,7 @@ import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { allProducts } from "../misc/productsCardData";
 import ProductCard from "../components/ProductCard";
 import { useState } from "react";
-import { useBoundStore } from "../app/store";
+import useAuth from "../hooks/useAuth";
 
 interface Product {
   id: number;
@@ -14,9 +14,10 @@ interface Product {
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>(allProducts);
-  const token = useBoundStore((state) => state.token);
 
-  console.log(token);
+  const { id } = useAuth();
+
+  console.log("id >>>>>>", id);
 
   const filterOnRating = () => {
     const filteredProducts = [...products].sort((a, b) => b.rating - a.rating);

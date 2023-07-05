@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useBoundStore } from "../app/store";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../lib/api/axiosConfig";
-import { z } from "zod";
 import { AxiosError } from "axios";
 
 const Login = () => {
