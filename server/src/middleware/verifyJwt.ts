@@ -1,22 +1,22 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Response, NextFunction, Request } from 'express';
+import jwt from "jsonwebtoken";
+import { Response, NextFunction, Request } from "express";
 
 export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
     return res.status(401).json({
       success: false,
-      message: 'Invalid header',
+      message: "Invalid header",
     });
   }
 
-  const token = authHeader.split(' ')[1];
+  const token = authHeader.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: 'No token!',
+      message: "No token!",
     });
   }
 

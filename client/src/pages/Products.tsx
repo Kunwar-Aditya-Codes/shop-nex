@@ -15,10 +15,6 @@ interface Product {
 const Products = () => {
   const [products, setProducts] = useState<Product[]>(allProducts);
 
-  const { id } = useAuth();
-
-  console.log("id >>>>>>", id);
-
   const filterOnRating = () => {
     const filteredProducts = [...products].sort((a, b) => b.rating - a.rating);
     setProducts(filteredProducts);

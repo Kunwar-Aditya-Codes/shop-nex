@@ -1,10 +1,11 @@
-import Customer from '../models/customer';
-import Verification from '../models/verification';
-import { Request, Response } from 'express';
-import { generateTokens } from '../utils/generateTokens';
-import { hashPassword, comparePassword } from '../utils/hashPassword';
-import optGenerator from 'otp-generator';
-import { sendVerificationEmailToUser } from '../utils/sendMail';
+import Customer from "../models/customer";
+import Verification from "../models/verification";
+import { Request, Response } from "express";
+import { generateTokens } from "../utils/generateTokens";
+import { hashPassword, comparePassword } from "../utils/hashPassword";
+import optGenerator from "otp-generator";
+import { sendVerificationEmailToUser } from "../utils/sendMail";
+import jwt from "jsonwebtoken";
 
 /**
  * @description Register a new customer
@@ -19,7 +20,7 @@ export const register = async (req: Request, res: Response) => {
   if (!firstName || !lastName || !email || !password) {
     return res.status(400).json({
       success: false,
-      message: 'Please fill all fields',
+      message: "Please fill all fields",
     });
   }
 
@@ -28,7 +29,7 @@ export const register = async (req: Request, res: Response) => {
   if (foundCustomer) {
     return res.status(400).json({
       success: false,
-      message: 'Email already exists',
+      message: "Email already exists",
     });
   }
 
@@ -43,12 +44,12 @@ export const register = async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken } = generateTokens({
     id: newCustomer._id.toString(),
-    role: 'customer',
+    role: "customer",
   });
 
-  res.cookie('refreshToken', refreshToken, {
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    path: '/api/v1/auth/refresh_token',
+    path: "/api/v1/auth/refresh_token",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
@@ -72,7 +73,7 @@ export const login = async (req: Request, res: Response) => {
   if (!email || !password) {
     return res.status(400).json({
       success: false,
-      message: 'Please fill all fields',
+      message: "Please fill all fields",
     });
   }
 
@@ -81,7 +82,7 @@ export const login = async (req: Request, res: Response) => {
   if (!foundCustomer) {
     return res.status(400).json({
       success: false,
-      message: 'Invalid credentials',
+      message: "Invalid credentials",
     });
   }
 
@@ -90,18 +91,18 @@ export const login = async (req: Request, res: Response) => {
   if (!isMatch) {
     return res.status(400).json({
       success: false,
-      message: 'Invalid credentials',
+      message: "Invalid credentials",
     });
   }
 
   const { accessToken, refreshToken } = generateTokens({
     id: foundCustomer._id.toString(),
-    role: 'customer',
+    role: "customer",
   });
 
-  res.cookie('refreshToken', refreshToken, {
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    path: '/api/v1/auth/refresh_token',
+    path: "/api/v1/auth/refresh_token",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
@@ -124,7 +125,7 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
   if (!email) {
     return res.status(400).json({
       success: false,
-      message: 'Please fill all fields',
+      message: "Please fill all fields",
     });
   }
 
@@ -137,7 +138,7 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
   if (!foundCustomer) {
     return res.status(400).json({
       success: false,
-      message: 'Invalid credentials',
+      message: "Invalid credentials",
     });
   }
 
@@ -152,7 +153,7 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     success: true,
-    message: 'Verification email sent',
+    message: "Verification email sent",
     info, // to be removed in production
   });
 };
@@ -170,7 +171,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
   if (!email || !otp) {
     return res.status(400).json({
       success: false,
-      message: 'Please fill all fields',
+      message: "Please fill all fields",
     });
   }
 
@@ -182,7 +183,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
   if (!foundVerification) {
     return res.status(400).json({
       success: false,
-      message: 'Invalid credentials',
+      message: "Invalid credentials",
     });
   }
 
@@ -196,7 +197,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
     return res.status(400).json({
       success: false,
-      message: 'OTP expired',
+      message: "OTP expired",
     });
   }
 
@@ -215,7 +216,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     success: true,
-    message: 'Email verified',
+    message: "Email verified",
   });
 };
 
@@ -235,18 +236,69 @@ export const adminLogin = async (req: Request, res: Response) => {
   if (email !== adminEmail || password !== adminPassword) {
     return res.status(400).json({
       success: false,
-      message: 'Invalid credentials',
+      message: "Invalid credentials",
     });
   }
 
   const { accessToken, refreshToken } = generateTokens({
-    id: '39f0432c-b949-438c-aed6-e4d759f19a76',
-    role: 'admin',
+    id: "39f0432c-b949-438c-aed6-e4d759f19a76",
+    role: "admin",
   });
 
-  res.cookie('refreshToken', refreshToken, {
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    path: '/api/v1/auth/refresh_token',
+    path: "/api/v1/auth/refresh_token",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  return res.status(200).json({
+    success: true,
+    accessToken,
+  });
+};
+
+/**
+ * @description Refresh Token
+ * @access private
+ * @route POST /api/v1/auth/refresh_token
+ * @param { cookie } req
+ * @returns { success , accesstoken , refreshtoken in cookie } res
+ */
+export const refreshToken = async (req: Request, res: Response) => {
+  const cookie = req.cookies;
+
+  const refreshToken = cookie?.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(203).json({ message: "Unauthenticated!" });
+  }
+
+  const decoded = jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET as string
+  );
+
+  const { id, role } = decoded as { id: string; role: string };
+
+  let foundUser;
+
+  if (role === "customer") {
+    foundUser = await Customer.findOne({
+      _id: id,
+    })
+      .lean()
+      .exec();
+  }
+
+  const { accessToken, refreshToken: newRefreshToken } = generateTokens({
+    id,
+    role,
+  });
+
+  res.cookie("refreshToken", newRefreshToken, {
+    httpOnly: true,
+    path: "/api/v1/auth/refresh_token",
+    sameSite: "none",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
