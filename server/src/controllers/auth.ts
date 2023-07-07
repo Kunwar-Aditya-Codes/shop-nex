@@ -299,6 +299,7 @@ export const refreshToken = async (req: Request, res: Response) => {
     httpOnly: true,
     path: "/api/v1/auth/refresh_token",
     sameSite: "none",
+    secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
