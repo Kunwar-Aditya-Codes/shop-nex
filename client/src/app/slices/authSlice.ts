@@ -2,7 +2,7 @@ import { StateCreator } from "zustand";
 
 export interface AuthSlice {
   token: string | undefined;
-  setToken: (accessToken: string) => void;
+  setToken: (accessToken: string | undefined) => void;
   logout: () => void;
 }
 

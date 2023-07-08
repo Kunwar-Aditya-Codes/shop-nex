@@ -16,6 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const setToken = useBoundStore((state) => state.setToken);
+  const setUser = useBoundStore((state) => state.setUser);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,6 +51,14 @@ const Login = () => {
         email: "",
         password: "",
       });
+
+      const userData = await axiosInstance.get("/customer/profile", {
+        headers: {
+          Authorization: `Bearer ${response.data.accessToken}`,
+        },
+      });
+
+      setUser(userData.data.customer);
 
       navigate("/products");
     } catch (error) {

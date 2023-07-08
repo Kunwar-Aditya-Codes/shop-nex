@@ -9,10 +9,7 @@ import { useState } from "react";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import { useBoundStore } from "../app/store";
-import useAuth from "../hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { getUser } from "../lib/api/queries/queries";
+import { axiosInstance } from "../lib/api/axiosConfig";
 
 type Customer = {
   _id: string;
@@ -28,6 +25,12 @@ const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const numberOfCartItems = useBoundStore((state) => state.totalItems);
   const user = useBoundStore((state) => state.user) as Customer;
+  const setToken = useBoundStore((state) => state.setToken);
+
+  const logout = async () => {
+    await axiosInstance.post("/auth/sign_out");
+    setToken(undefined);
+  };
 
   return (
     <div className="sticky left-0 right-0 top-0 z-[100] h-[4rem]  w-full overflow-hidden overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b]">
@@ -127,7 +130,10 @@ const Navbar = () => {
                   alt="profile-image"
                   className="h-7 w-7 cursor-pointer rounded-full"
                 />
-                <IoLogOutOutline className="h-7 w-7 cursor-pointer" />
+                <IoLogOutOutline
+                  onClick={logout}
+                  className="h-7 w-7 cursor-pointer"
+                />
               </div>
             ) : (
               <Link to="/sign_in">
