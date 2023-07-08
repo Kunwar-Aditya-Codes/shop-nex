@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useBoundStore } from '../app/store';
-import useRefreshToken from '../hooks/useRefreshToken';
-import { Outlet } from 'react-router-dom';
-import usePersist from '../hooks/usePersist';
+import { useEffect, useState } from "react";
+import { useBoundStore } from "../app/store";
+import useRefreshToken from "../hooks/useRefreshToken";
+import { Outlet } from "react-router-dom";
+import usePersist from "../hooks/usePersist";
 
 const PersistLogin = () => {
   const token = useBoundStore((state) => state.token);

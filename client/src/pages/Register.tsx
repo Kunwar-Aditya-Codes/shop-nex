@@ -20,7 +20,6 @@ const Register = () => {
   });
 
   const setToken = useBoundStore((state) => state.setToken);
-  const setUser = useBoundStore((state) => state.setUser);
 
   const navigate = useNavigate();
 
@@ -54,7 +53,6 @@ const Register = () => {
       });
 
       setToken(response.data.accessToken);
-      setUser(response.data.accessToken);
 
       toast.success("Success", {
         id: "register",

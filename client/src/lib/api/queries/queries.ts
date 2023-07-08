@@ -1,7 +1,4 @@
-export const getUser = (privateAxiosInstance: any) => {
-  const getUserProfile = async () => {
-    const response = await privateAxiosInstance.get('/customer/profile');
-    console.log(response);
-  };
-  return getUserProfile;
+export const getUser = async (privateAxiosInstance: any) => {
+  const response = await privateAxiosInstance.get("/customer/profile");
+  return response;
 };

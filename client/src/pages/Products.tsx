@@ -2,7 +2,6 @@ import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { allProducts } from "../misc/productsCardData";
 import ProductCard from "../components/ProductCard";
 import { useState } from "react";
-import useAuth from "../hooks/useAuth";
 
 interface Product {
   id: number;

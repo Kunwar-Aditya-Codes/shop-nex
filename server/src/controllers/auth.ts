@@ -49,7 +49,8 @@ export const register = async (req: Request, res: Response) => {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    path: "/api/v1/auth/refresh_token",
+    sameSite: "none",
+    secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
@@ -102,7 +103,8 @@ export const login = async (req: Request, res: Response) => {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    path: "/api/v1/auth/refresh_token",
+    sameSite: "none",
+    secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
@@ -297,7 +299,6 @@ export const refreshToken = async (req: Request, res: Response) => {
 
   res.cookie("refreshToken", newRefreshToken, {
     httpOnly: true,
-    path: "/api/v1/auth/refresh_token",
     sameSite: "none",
     secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -307,4 +308,23 @@ export const refreshToken = async (req: Request, res: Response) => {
     success: true,
     accessToken,
   });
+};
+
+/**
+ * @description Logout
+ * @access private
+ * @route POST /api/v1/auth/sign_out
+ * @param { cookie } req
+ * @returns { No response } res
+ */
+export const logout = async (req: Request, res: Response) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    return res.status(203).json({ message: "Already logged out!" });
+  }
+
+  res.clearCookie("refreshToken");
+
+  return res.status(200).json({ message: "Logged out successfully!" });
 };
