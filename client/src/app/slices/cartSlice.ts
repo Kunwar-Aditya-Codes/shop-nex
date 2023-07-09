@@ -1,4 +1,4 @@
-import { StateCreator } from "zustand";
+import { StateCreator } from 'zustand';
 
 export interface CartSlice {
   totalAmount: number;
@@ -20,6 +20,7 @@ export interface CartSlice {
     quantity: number;
   }) => void;
   removeProducts: (productId: number) => void;
+  calculateTotalItemsAndAmount: () => void;
 }
 
 const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
@@ -73,6 +74,26 @@ const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
         products: updatedProducts,
         totalAmount: updatedTotalAmount,
         totalItems: updatedTotalItems,
+      };
+    }),
+
+  calculateTotalItemsAndAmount: () =>
+    set((state) => {
+      console.log("effect rea")
+      const totalItems = state.products.reduce(
+        (sum, product) => sum + product.quantity,
+        0
+      );
+
+      const totalAmount = state.products.reduce(
+        (sum, product) => sum + product.price * product.quantity,
+        0
+      );
+
+      return {
+        ...state,
+        totalItems,
+        totalAmount,
       };
     }),
 });

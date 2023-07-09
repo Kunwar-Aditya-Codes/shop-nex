@@ -5,6 +5,7 @@ const Cart = () => {
   const cartItems = useBoundStore((state) => state.products);
   const totalItems = useBoundStore((state) => state.totalItems);
   const totalAmount = useBoundStore((state) => state.totalAmount);
+  
 
   return (
     <div className="mx-auto flex h-full w-full max-w-7xl flex-grow flex-col items-center space-y-8 p-6 lg:flex-row-reverse lg:items-start lg:space-y-0">

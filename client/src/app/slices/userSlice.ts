@@ -1,16 +1,18 @@
-import { StateCreator } from "zustand";
+import { StateCreator } from 'zustand';
 
 export interface UserSlice {
   user: {} | null;
-  setUser: (user: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    isVerified: boolean;
-    email: string;
-    address: string[];
-    profileImage: string;
-  }) => void;
+  setUser: (
+    user: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      isVerified: boolean;
+      email: string;
+      address: string[];
+      profileImage: string;
+    } | null
+  ) => void;
 }
 
 const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = (set) => ({
