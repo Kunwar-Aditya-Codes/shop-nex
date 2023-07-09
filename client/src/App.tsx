@@ -12,9 +12,9 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
-        <Route path='/sign_in' element={<Login />} />
-        <Route path='/sign_up' element={<Register />} />
         <Route element={<PersistLogin />}>
+          <Route path='/sign_in' element={<Login />} />
+          <Route path='/sign_up' element={<Register />} />
           <Route index element={<Home />} />
           <Route path='/products' element={<Products />} />
           <Route path='/product_brands' element={<Brands />} />
