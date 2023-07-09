@@ -79,7 +79,6 @@ const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 
   calculateTotalItemsAndAmount: () =>
     set((state) => {
-      console.log("effect rea")
       const totalItems = state.products.reduce(
         (sum, product) => sum + product.quantity,
         0

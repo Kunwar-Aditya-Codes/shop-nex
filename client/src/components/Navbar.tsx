@@ -5,6 +5,7 @@ import {
   IoCloseOutline,
   IoLogOutOutline,
 } from 'react-icons/io5';
+import { LuLogOut } from 'react-icons/lu';
 import { useEffect, useState } from 'react';
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
@@ -121,11 +122,8 @@ const Navbar = () => {
         </div>
 
         {/* Right */}
-        <div className='flex items-center space-x-4'>
-          <div className='flex items-center space-x-4'>
-            <button className='rounded-md border border-zinc-900 p-2 hover:bg-zinc-900'>
-              <IoSearchOutline />
-            </button>
+        <div className='flex items-center '>
+          <div className='flex items-center space-x-6'>
             <Link
               to='/cart_orders'
               className='relative rounded-md border border-zinc-900 p-2 hover:bg-zinc-900'
@@ -136,16 +134,13 @@ const Navbar = () => {
               </p>
             </Link>
             {user !== null ? (
-              <div className='flex items-center space-x-4'>
+              <div className='flex items-center space-x-6'>
                 <img
                   src={user.profileImage}
                   alt='profile-image'
                   className='h-7 w-7 cursor-pointer rounded-full'
                 />
-                <IoLogOutOutline
-                  onClick={logout}
-                  className='h-7 w-7 cursor-pointer'
-                />
+                <LuLogOut onClick={logout} className='h-5 w-5 cursor-pointer' />
               </div>
             ) : (
               <Link to='/sign_in'>

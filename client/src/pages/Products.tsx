@@ -1,7 +1,8 @@
-import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
-import { allProducts } from "../misc/productsCardData";
-import ProductCard from "../components/ProductCard";
-import { useState } from "react";
+import { allProducts } from '../misc/productsCardData';
+import ProductCard from '../components/ProductCard';
+import { useState } from 'react';
+import Filter from '../components/Filter';
+import { HiOutlineAdjustmentsHorizontal } from 'react-icons/hi2';
 
 interface Product {
   id: number;
@@ -12,37 +13,45 @@ interface Product {
 }
 
 const Products = () => {
-  const [products, setProducts] = useState<Product[]>(allProducts);
+  const [filterShow, setFilterShow] = useState(false);
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [selectedPrice, setSelectedPrice] = useState(0);
 
-  const filterOnRating = () => {
-    const filteredProducts = [...products].sort((a, b) => b.rating - a.rating);
-    setProducts(filteredProducts);
+  const filteredProducts: Product[] = allProducts.filter((product) => {
+    return product.rating >= selectedRating && product.price >= selectedPrice;
+  });
+
+  const handleRatingChange = (rating: number) => {
+    setSelectedRating(rating);
+  };
+
+  const handlePriceChange = (price: number) => {
+    setSelectedPrice(price);
   };
 
   return (
-    <div className="mx-auto mb-6 w-full max-w-7xl p-4">
+    <div className='relative mx-auto mb-6 mt-8 flex w-full max-w-7xl justify-center p-4 md:justify-end'>
       {/* Filters */}
-      <div className="flex  items-center  space-x-8 overflow-x-scroll py-4 lg:px-4">
-        <div>
-          <HiOutlineAdjustmentsHorizontal className="h-5 w-5" />
-        </div>
 
-        <button
-          onClick={filterOnRating}
-          className="rounded-sm bg-zinc-900 px-4 py-1 font-light tracking-wide transition ease-out hover:bg-zinc-700"
-        >
-          Ratings
-        </button>
-        <button className="rounded-sm bg-zinc-900 px-4 py-1 font-light tracking-wide transition ease-out hover:bg-zinc-700">
-          Price
-        </button>
-        <button className="rounded-sm bg-zinc-900 px-4 py-1 font-light tracking-wide transition ease-out hover:bg-zinc-700">
-          New Arrivals
-        </button>
+      <HiOutlineAdjustmentsHorizontal
+        onClick={() => setFilterShow(!filterShow)}
+        className='absolute -top-6 left-5 h-6 w-6 cursor-pointer md:hidden'
+      />
+      <div
+        className={`${
+          filterShow ? 'translate-x-0' : '-translate-x-full'
+        } absolute left-0 top-3 h-full w-[85%] rounded-sm border-zinc-900 bg-[#09090b]/95 p-4 transition  ease-out md:relative md:top-0 md:flex-[0.2] md:translate-x-0 md:border`}
+      >
+        <Filter
+          selectedRating={selectedRating}
+          selectedPrice={selectedPrice}
+          onRatingChange={handleRatingChange}
+          onPriceChange={handlePriceChange}
+        />
       </div>
       {/* Products */}
-      <div className="mt-10 grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:justify-items-start">
-        {products.map((product) => (
+      <div className='grid grid-cols-1 justify-items-center gap-8 px-4 md:flex-[0.8] md:grid-cols-2 lg:grid-cols-3 lg:justify-items-start'>
+        {filteredProducts.map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
