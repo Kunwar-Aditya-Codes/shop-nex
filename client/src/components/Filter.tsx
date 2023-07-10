@@ -1,24 +1,19 @@
-interface Props {
-  selectedRating: number;
-  selectedPrice: number;
-  onRatingChange: (rating: number) => void;
-  onPriceChange: (price: number) => void;
-}
+import { useBoundStore } from '../app/store';
 
-const Filter = ({
-  selectedRating,
-  selectedPrice,
-  onRatingChange,
-  onPriceChange,
-}: Props) => {
+const Filter = () => {
+  const price = useBoundStore((state) => state.price);
+  const rating = useBoundStore((state) => state.rating);
+  const setPrice = useBoundStore((state) => state.setPrice);
+  const setRating = useBoundStore((state) => state.setRating);
+
   const handleRatingChange = (event: any) => {
     const rating = parseInt(event.target.value);
-    onRatingChange(rating);
+    setRating(rating);
   };
 
   const handlePriceChange = (event: any) => {
     const price = parseInt(event.target.value);
-    onPriceChange(price);
+    setPrice(price);
   };
   return (
     <div className=' space-y-6 text-white'>
@@ -29,11 +24,11 @@ const Filter = ({
           min='0'
           max='5'
           step='1'
-          value={selectedRating}
+          value={rating}
           className='accent-zinc-900'
           onChange={handleRatingChange}
         />
-        <p>Selected rating: {selectedRating}</p>
+        <p>Selected rating: {rating}</p>
       </div>
 
       <div className='space-y-3'>
@@ -44,10 +39,10 @@ const Filter = ({
           max='2000'
           step='200'
           className='accent-zinc-900'
-          value={selectedPrice}
+          value={price}
           onChange={handlePriceChange}
         />
-        <p>Selected price: {selectedPrice}</p>
+        <p>Selected price: {price}</p>
       </div>
     </div>
   );
