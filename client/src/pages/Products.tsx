@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Filter from '../components/Filter';
 import { HiOutlineAdjustmentsHorizontal } from 'react-icons/hi2';
 import { useBoundStore } from '../app/store';
-import createProductFilterSlice from '../app/slices/productFilterSlice';
 
 interface Product {
   id: number;
@@ -26,7 +25,6 @@ const Products = () => {
   return (
     <div className='relative mx-auto mb-6 mt-8 flex w-full max-w-7xl justify-center p-4 md:justify-end'>
       {/* Filters */}
-
       <HiOutlineAdjustmentsHorizontal
         onClick={() => setFilterShow(!filterShow)}
         className='absolute -top-6 left-5 h-6 w-6 cursor-pointer md:hidden'
@@ -34,7 +32,7 @@ const Products = () => {
       <div
         className={`${
           filterShow ? 'translate-x-0' : '-translate-x-full'
-        } absolute left-0 top-3 h-full w-[85%] rounded-sm border-zinc-900 bg-[#09090b]/95 p-4 transition  ease-out md:relative md:top-0 md:flex-[0.2] md:translate-x-0 md:border`}
+        } absolute left-0 top-3 h-full w-full rounded-sm border-zinc-900 bg-[#09090b]/95 p-4 transition  ease-out md:relative md:top-0 md:flex-[0.2] md:translate-x-0 md:border`}
       >
         <Filter />
       </div>
