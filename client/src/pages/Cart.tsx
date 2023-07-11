@@ -1,12 +1,49 @@
+import { loadStripe } from '@stripe/stripe-js';
 import { useBoundStore } from '../app/store';
 import CartCard from '../components/CartCard';
 import useAuth from '../hooks/useAuth';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+
+interface UserData {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  profileImage: string;
+  address: string[];
+  isVerified: string;
+}
 
 const Cart = () => {
   const cartItems = useBoundStore((state) => state.products);
   const totalItems = useBoundStore((state) => state.totalItems);
   const totalAmount = useBoundStore((state) => state.totalAmount);
+  const userData = useBoundStore((state) => state.user) as UserData;
+  const clearCart = useBoundStore((state) => state.clearCart);
+
   const { id } = useAuth();
+
+  const axiosPrivate = useAxiosPrivate();
+
+  const buy = async () => {
+    if (!id) {
+      return;
+    }
+    const stripe = await loadStripe(
+      'pk_test_51MjcN3SGaf3HY3Jafr0G13vE2oK5zdcd2gwpjqtdPXdtFo6a6MFovmryssW5yKoab50fEzZdupoHdDqlhBDInPmk00AmD0r7Pf'
+    );
+
+    const response = await axiosPrivate.post(`/session/${id}/checkout`, {
+      orderItems: cartItems,
+      customerEmail: userData.email,
+    });
+
+    stripe?.redirectToCheckout({
+      sessionId: response.data.session.id,
+    });
+
+    clearCart();
+  };
 
   return (
     <div className='mx-auto flex h-full w-full max-w-7xl flex-grow flex-col items-center space-y-8 p-6 lg:flex-row-reverse lg:items-start lg:space-y-0'>
@@ -22,6 +59,7 @@ const Cart = () => {
             Total Amount: <span className=''> ${totalAmount}</span>
           </p>
           <button
+            onClick={buy}
             disabled={totalAmount === 0 || !id}
             className='rounded-md bg-white/75 py-2 font-medium uppercase tracking-wider text-black transition ease-out hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-800'
           >

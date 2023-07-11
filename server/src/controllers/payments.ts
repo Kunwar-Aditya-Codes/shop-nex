@@ -20,7 +20,7 @@ export const checkout = async (req: Request, res: Response) => {
     });
   }
 
-  const { orderItems } = req.body;
+  const { orderItems, customerEmail } = req.body;
 
   if (!orderItems || orderItems.length === 0) {
     return res.status(203).json({
@@ -34,19 +34,20 @@ export const checkout = async (req: Request, res: Response) => {
       price_data: {
         currency: 'inr',
         product_data: {
-          name: item.productName,
+          name: item.name,
         },
-        unit_amount: item.price,
+        unit_amount: item.price * 100,
       },
       quantity: item.quantity,
     };
   });
 
   const session = await stripe.checkout.sessions.create({
-    success_url: 'http://localhost:5173/orders/success',
+    success_url: 'http://localhost:5173/',
     cancel_url: 'http://localhost:5173/orders/failed',
     line_items: lineItems,
     mode: 'payment',
+    customer_email: customerEmail,
   });
 
   return res.status(200).json({

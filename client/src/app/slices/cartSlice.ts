@@ -21,6 +21,7 @@ export interface CartSlice {
   }) => void;
   removeProducts: (productId: number) => void;
   calculateTotalItemsAndAmount: () => void;
+  clearCart: () => void;
 }
 
 const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
@@ -95,6 +96,13 @@ const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
         totalAmount,
       };
     }),
+
+  clearCart: () =>
+    set(() => ({
+      products: [],
+      totalAmount: 0,
+      totalItems: 0,
+    })),
 });
 
 export default createCartSlice;
