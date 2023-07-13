@@ -8,7 +8,7 @@ export interface AuthSlice {
 
 const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (set) => ({
   token: undefined,
-
+  
   setToken: (accessToken) =>
     set(() => {
       return {

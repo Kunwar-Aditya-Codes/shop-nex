@@ -8,7 +8,7 @@ export interface OrderAttributes extends Schema {
   shippingAddress: string;
   deliveryDate: Date;
   orderItems: mongoose.Schema.Types.ObjectId[];
-  // paymentId: mongoose.Schema.Types.ObjectId;
+  paymentId: mongoose.Schema.Types.ObjectId;
 }
 
 const orderSchema = new mongoose.Schema<OrderAttributes>(
@@ -51,11 +51,11 @@ const orderSchema = new mongoose.Schema<OrderAttributes>(
       required: true,
     },
 
-    // paymentId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Payment',
-    //   required: true,
-    // },
+    paymentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Payment',
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -38,9 +38,11 @@ const Cart = () => {
       customerEmail: userData.email,
     });
 
-    stripe?.redirectToCheckout({
+    await stripe?.redirectToCheckout({
       sessionId: response.data.session.id,
     });
+
+    console.log('hello');
 
     clearCart();
   };
