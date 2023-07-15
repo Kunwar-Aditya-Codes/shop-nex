@@ -1,7 +1,8 @@
 import { stripe } from '../config/stripe';
-import Payment from '../models/payment';
 import { Request, Response } from 'express';
 import { createOrder } from './order';
+import crypto from 'crypto';
+import Success from '../models/success';
 
 /**
  * @description Create a payment instance
@@ -54,8 +55,14 @@ export const checkout = async (req: Request, res: Response) => {
     };
   });
 
+  const successToken = await crypto.randomBytes(32).toString('hex');
+
+  await Success.create({
+    token: successToken,
+  });
+
   const session = await stripe.checkout.sessions.create({
-    success_url: `http://localhost:5173/orders/${1}`,
+    success_url: `http://localhost:5173/orders/success/${successToken}`,
     cancel_url: 'http://localhost:5173/cart_orders',
     shipping_options: [
       {

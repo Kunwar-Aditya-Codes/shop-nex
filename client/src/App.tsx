@@ -20,7 +20,7 @@ function App() {
           <Route path='/products' element={<Products />} />
           <Route path='/product_brands' element={<Brands />} />
           <Route path='/cart_orders' element={<Cart />} />
-          <Route path='/orders/:orderId' element={<SuccessOrder />} />
+          <Route path='/orders/success/:token' element={<SuccessOrder />} />
         </Route>
       </Route>
     </Routes>

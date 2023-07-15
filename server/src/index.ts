@@ -13,6 +13,7 @@ import customer from './routes/customer';
 import product from './routes/product';
 import order from './routes/order';
 import payments from './routes/payments';
+import success from './routes/success';
 
 const app = express();
 
@@ -49,6 +50,8 @@ app.use('/api/v1/product', product);
 app.use('/api/v1/order', order);
 /**@description Payment routes */
 app.use('/api/v1/session', payments);
+/**@description Success routes */
+app.use('/api/v1/verify', success);
 
 mongoose.connection.on('connected', () => {
   console.log('Connected to MongoDB');

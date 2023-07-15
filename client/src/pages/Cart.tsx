@@ -1,4 +1,3 @@
-// import { loadStripe } from '@stripe/stripe-js';
 import { useBoundStore } from '../app/store';
 import CartCard from '../components/CartCard';
 import useAuth from '../hooks/useAuth';
@@ -37,9 +36,6 @@ const Cart = () => {
       });
       return;
     }
-    // const stripe = await loadStripe(
-    //   'pk_test_51MjcN3SGaf3HY3Jafr0G13vE2oK5zdcd2gwpjqtdPXdtFo6a6MFovmryssW5yKoab50fEzZdupoHdDqlhBDInPmk00AmD0r7Pf'
-    // );
 
     const response = await axiosPrivate.post(`/session/${id}/checkout`, {
       orderItems: cartItems,
