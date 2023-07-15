@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  createOrder,
   getAllOrders,
   getAllOrdersForAdmin,
   updateOrderStatus,
@@ -11,7 +10,6 @@ const router = Router();
 
 router.use(verifyJwt);
 
-router.post('/:userId/create', createOrder);
 router.get('/:userId/all', getAllOrders);
 router.get('/admin/view_all', getAllOrdersForAdmin);
 router.patch('/admin/:orderId/update_status', updateOrderStatus);

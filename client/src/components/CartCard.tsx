@@ -55,7 +55,7 @@ const CartCard = ({
             +
           </button>
         </div>
-        <p className="text-sm font-extralight text-white/75">$ {price}.00</p>
+        <p className="text-sm font-extralight text-white/75">₹ {price}.00</p>
       </div>
     </div>
   );

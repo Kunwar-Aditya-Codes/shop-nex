@@ -5,34 +5,15 @@ import { Request, Response } from 'express';
  * @description Create a new order
  * @access private
  * @route POST /api/v1/order/:userId/create
- * @param { userId , totalAmount , shippingAddress , orderItems  , paymentId } req
+ * @param { } customer
+ * @param { } data
  * @returns { success, message, order } res
  */
-export const createOrder = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  const { orderItems, totalAmount, shippingAddress } = req.body;
+export const createOrder = async (customer: any, data: any) => {
+  console.log('customer>>>>>', customer);
+  console.log('data>>>>>>>>', data);
 
-  if (!totalAmount || !shippingAddress || orderItems.length === 0 || !userId) {
-    return res.status(403).json({
-      success: false,
-      message: 'Please fill all fields',
-    });
-  }
-
-  const order = await Order.create({
-    customerId: userId,
-    totalAmount,
-    orderStatus: 'PENDING',
-    shippingAddress,
-    deliveryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
-    orderItems,
-  });
-
-  return res.status(201).json({
-    success: true,
-    message: 'Order created successfully',
-    order,
-  });
+  
 };
 
 /**

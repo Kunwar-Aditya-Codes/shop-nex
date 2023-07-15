@@ -37,7 +37,7 @@ const Products = () => {
         <Filter />
       </div>
       {/* Products */}
-      <div className='grid grid-cols-1 justify-items-center gap-8 px-4 md:flex-[0.8] md:grid-cols-2 lg:grid-cols-3 lg:justify-items-start'>
+      <div className='grid grid-cols-1 justify-items-center gap-8 px-4 md:flex-[0.8] md:grid-cols-2 lg:justify-items-start xl:grid-cols-3'>
         {filteredProducts.map((product) => (
           <ProductCard
             key={product.id}

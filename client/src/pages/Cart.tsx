@@ -1,8 +1,9 @@
-import { loadStripe } from '@stripe/stripe-js';
+// import { loadStripe } from '@stripe/stripe-js';
 import { useBoundStore } from '../app/store';
 import CartCard from '../components/CartCard';
 import useAuth from '../hooks/useAuth';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import toast from 'react-hot-toast';
 
 interface UserData {
   _id: string;
@@ -26,25 +27,36 @@ const Cart = () => {
   const axiosPrivate = useAxiosPrivate();
 
   const buy = async () => {
+    toast.loading('Processing checkout', {
+      id: 'payment',
+    });
+
     if (!id) {
+      toast.error('Login to pay!', {
+        id: 'payment',
+      });
       return;
     }
-    const stripe = await loadStripe(
-      'pk_test_51MjcN3SGaf3HY3Jafr0G13vE2oK5zdcd2gwpjqtdPXdtFo6a6MFovmryssW5yKoab50fEzZdupoHdDqlhBDInPmk00AmD0r7Pf'
-    );
+    // const stripe = await loadStripe(
+    //   'pk_test_51MjcN3SGaf3HY3Jafr0G13vE2oK5zdcd2gwpjqtdPXdtFo6a6MFovmryssW5yKoab50fEzZdupoHdDqlhBDInPmk00AmD0r7Pf'
+    // );
 
     const response = await axiosPrivate.post(`/session/${id}/checkout`, {
       orderItems: cartItems,
       customerEmail: userData.email,
     });
 
-    await stripe?.redirectToCheckout({
-      sessionId: response.data.session.id,
-    });
+    if (response.data.url) {
+      toast.dismiss('payment');
+      window.location.href = response.data.url;
+    } else {
+      toast.error('Error processing , try again!', {
+        id: 'payment',
+      });
+      return;
+    }
 
-    console.log('hello');
-
-    clearCart();
+    // clearCart();
   };
 
   return (
