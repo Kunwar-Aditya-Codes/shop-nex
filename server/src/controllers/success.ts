@@ -20,22 +20,16 @@ export const verifySuccessToken = async (req: Request, res: Response) => {
   const { token } = req.body;
 
   if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: 'No token',
-    });
+    return res.status(401).json({ success: false, message: 'No token' });
   }
 
   const foundToken = await Success.findOne({ token });
 
   if (!foundToken) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid',
-    });
+    return res.status(400).json({ success: false, message: 'Invalid token' });
   }
 
-  return res.status(200).json({
-    success: true,
-  });
+  await Success.deleteOne({ token });
+
+  return res.status(200).json({ success: true });
 };

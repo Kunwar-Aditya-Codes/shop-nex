@@ -8,6 +8,7 @@ import Products from './pages/Products';
 import Brands from './pages/Brands';
 import PersistLogin from './components/PersistLogin';
 import SuccessOrder from './pages/SuccessOrder';
+import Error from './pages/Error';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/product_brands' element={<Brands />} />
           <Route path='/cart_orders' element={<Cart />} />
           <Route path='/orders/success/:token' element={<SuccessOrder />} />
+          <Route path='*' element={<Error />} />
         </Route>
       </Route>
     </Routes>

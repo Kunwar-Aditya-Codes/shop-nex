@@ -45,14 +45,13 @@ const Cart = () => {
     if (response.data.url) {
       toast.dismiss('payment');
       window.location.href = response.data.url;
+      clearCart();
     } else {
       toast.error('Error processing , try again!', {
         id: 'payment',
       });
       return;
     }
-
-    // clearCart();
   };
 
   return (
