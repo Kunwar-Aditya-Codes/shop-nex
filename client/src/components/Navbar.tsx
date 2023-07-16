@@ -46,7 +46,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className='sticky left-0 right-0 top-0 z-[100] h-[4rem]  w-full overflow-hidden overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b]'>
+    <div
+      className={`sticky left-0 right-0 top-0 z-[100] h-[4rem]  w-full overflow-hidden overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b] lg:bg-opacity-80 lg:backdrop-blur-lg `}
+    >
       <div className='mx-auto flex h-full max-w-7xl items-center justify-between px-4'>
         {/* Left */}
         <div className='flex items-center space-x-4'>
@@ -88,7 +90,7 @@ const Navbar = () => {
         <div
           className={`${
             sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'
-          } fixed inset-y-0 left-0 z-30 w-full transform overflow-y-auto bg-zinc-900/10 backdrop-blur-sm backdrop-filter transition duration-[250ms] lg:hidden`}
+          } fixed inset-y-0 left-0 z-[200] w-full transform overflow-y-auto bg-zinc-900/10 backdrop-blur-sm backdrop-filter transition duration-[250ms] lg:hidden`}
         >
           <div
             className='

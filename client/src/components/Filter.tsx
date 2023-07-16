@@ -25,20 +25,20 @@ const Filter = () => {
           max='5'
           step='1'
           value={rating}
-          className='accent-zinc-900'
+          className='w-[80%] accent-zinc-900 lg:w-full'
           onChange={handleRatingChange}
         />
         <p>Selected rating: {rating}</p>
       </div>
 
-      <div className='space-y-3'>
+      <div className=' space-y-3'>
         <h1>Price</h1>
         <input
           type='range'
           min='0'
           max='2000'
           step='200'
-          className='accent-zinc-900'
+          className='w-[80%] accent-zinc-900 lg:w-full'
           value={price}
           onChange={handlePriceChange}
         />

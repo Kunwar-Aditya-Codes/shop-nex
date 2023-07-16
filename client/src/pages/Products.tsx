@@ -32,7 +32,7 @@ const Products = () => {
       <div
         className={`${
           filterShow ? 'translate-x-0' : '-translate-x-full'
-        } absolute left-0 top-3 h-full w-full rounded-sm border-zinc-900 bg-[#09090b]/95 p-4 transition  ease-out md:relative md:top-0 md:flex-[0.2] md:translate-x-0 md:border`}
+        } absolute left-0 top-3 h-full w-full rounded-sm border-zinc-900 bg-[#09090b]/80 p-4 backdrop-blur-md transition  ease-out md:relative md:top-0 md:flex-[0.2] md:translate-x-0 md:border`}
       >
         <Filter />
       </div>
