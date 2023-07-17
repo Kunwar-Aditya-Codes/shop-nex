@@ -5,10 +5,22 @@ export interface OrderAttributes extends Schema {
   orderStatus: string;
   customerId: mongoose.Schema.Types.ObjectId;
   totalAmount: number;
-  shippingAddress: string;
   deliveryDate: Date;
-  orderItems: mongoose.Schema.Types.ObjectId[];
-  paymentId: mongoose.Schema.Types.ObjectId;
+  shippingDetails: {
+    address: {
+      city: string;
+      country: string;
+      line1: string;
+      line2: string;
+      postal_code: string;
+      state: string;
+    };
+    name: string;
+  };
+  orderItems: [];
+  // orderItems: mongoose.Schema.Types.ObjectId[];
+  paymentMethod: string;
+  paymentStatus: string;
 }
 
 const orderSchema = new mongoose.Schema<OrderAttributes>(
@@ -20,7 +32,7 @@ const orderSchema = new mongoose.Schema<OrderAttributes>(
     },
 
     orderItems: [
-      { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+      // { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
     ],
 
     orderStatus: {
@@ -41,20 +53,30 @@ const orderSchema = new mongoose.Schema<OrderAttributes>(
       required: true,
     },
 
-    shippingAddress: {
+    paymentMethod: {
       type: String,
       required: true,
     },
 
-    deliveryDate: {
-      type: Date,
+    paymentStatus: {
+      type: String,
       required: true,
     },
 
-    paymentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Payment',
-      required: true,
+    shippingDetails: {
+      address: {
+        city: String,
+        country: String,
+        line1: String,
+        line2: String,
+        postal_code: String,
+        state: String,
+      },
+      name: String,
+    },
+
+    deliveryDate: {
+      type: Date,
     },
   },
   {

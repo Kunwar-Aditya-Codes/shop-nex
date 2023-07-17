@@ -18,7 +18,7 @@ const Filter = () => {
   return (
     <div className=' space-y-6 text-white'>
       <div className='space-y-3'>
-        <h1>Rating</h1>
+        <h1>Rating ( {rating} - 5 )</h1>
         <input
           type='range'
           min='0'
@@ -32,7 +32,7 @@ const Filter = () => {
       </div>
 
       <div className=' space-y-3'>
-        <h1>Price</h1>
+        <h1>Price ( ₹ {price} - ₹ 2000 )</h1>
         <input
           type='range'
           min='0'
@@ -42,7 +42,6 @@ const Filter = () => {
           value={price}
           onChange={handlePriceChange}
         />
-        <p>Selected price: {price}</p>
       </div>
     </div>
   );

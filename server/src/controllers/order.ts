@@ -10,10 +10,22 @@ import { Request, Response } from 'express';
  * @returns { success, message, order } res
  */
 export const createOrder = async (customer: any, data: any) => {
-  console.log('customer>>>>>', customer);
-  console.log('data>>>>>>>>', data);
+  const orderItems = JSON.parse(customer.metadata.cart);
+  const userId = customer.metadata.userId;
 
-  
+  const totalAmount = data.amount_total;
+  const shippingDetails = data.shipping_details;
+  const paymentMethod = data.payment_method_types[0];
+  const paymentStatus = data.payment_status;
+
+  await Order.create({
+    orderItems,
+    customerId: userId,
+    totalAmount,
+    shippingDetails,
+    paymentMethod,
+    paymentStatus,
+  });
 };
 
 /**
