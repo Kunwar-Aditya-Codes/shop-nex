@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import useAuth from '../hooks/useAuth';
 
 const SuccessOrder = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
+  const { id } = useAuth();
 
   useEffect(() => {
     const validateToken = async () => {
@@ -18,7 +20,7 @@ const SuccessOrder = () => {
           navigate('/');
         } else {
           setTimeout(() => {
-            navigate('/view_orders');
+            navigate(`/${id}/view_orders`);
           }, 5000);
         }
       } catch (err) {

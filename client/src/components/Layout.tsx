@@ -6,6 +6,9 @@ const Layout = () => {
   return (
     <div className=' flex min-h-screen flex-col bg-[#09090b] text-white'>
       <Navbar />
+      <div>
+        
+      </div>
       <div className=' mx-auto  flex h-full w-full flex-grow flex-col'>
         <Outlet />
       </div>

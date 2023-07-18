@@ -47,8 +47,9 @@ const Navbar = () => {
 
   return (
     <div
-      className={`sticky left-0 right-0 top-0 z-[100] h-[4rem]  w-full overflow-hidden overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b] lg:bg-opacity-80 lg:backdrop-blur-lg `}
+      className={`sticky  left-0 right-0 top-0 z-[100] h-[4rem]  w-full overflow-hidden overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b] lg:bg-opacity-80 lg:backdrop-blur-lg `}
     >
+      {/* Navbar */}
       <div className='mx-auto flex h-full max-w-7xl items-center justify-between px-4'>
         {/* Left */}
         <div className='flex items-center space-x-4'>
@@ -136,12 +137,13 @@ const Navbar = () => {
               </p>
             </Link>
             {user !== null ? (
-              <div className='flex items-center space-x-6'>
+              <div className=' flex items-center space-x-6'>
                 <img
                   src={user.profileImage}
                   alt='profile-image'
                   className='h-7 w-7 cursor-pointer rounded-full'
                 />
+
                 <LuLogOut onClick={logout} className='h-5 w-5 cursor-pointer' />
               </div>
             ) : (

@@ -38,7 +38,7 @@ export const createOrder = async (customer: any, data: any) => {
 export const getAllOrders = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
-  const orders = await Order.findOne({
+  const orders = await Order.find({
     customerId: userId,
   })
     .populate('orderItems')
