@@ -20,7 +20,7 @@ const SuccessOrder = () => {
           navigate('/');
         } else {
           setTimeout(() => {
-            navigate(`/${id}/view_orders`);
+            navigate(`/account/${id}/view_orders`);
           }, 5000);
         }
       } catch (err) {

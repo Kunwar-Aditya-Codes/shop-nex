@@ -45,6 +45,10 @@ const Navbar = () => {
     navigate('/sign_in');
   };
 
+  const profileNavigate = () => {
+    navigate(`account/${user?._id}/profile`);
+  };
+
   return (
     <div
       className={`sticky  left-0 right-0 top-0 z-[100] h-[4rem]  w-full overflow-hidden overflow-x-hidden border-b border-b-zinc-900 bg-[#09090b] lg:bg-opacity-80 lg:backdrop-blur-lg `}
@@ -140,6 +144,7 @@ const Navbar = () => {
               <div className=' flex items-center space-x-6'>
                 <img
                   src={user.profileImage}
+                  onClick={profileNavigate}
                   alt='profile-image'
                   className='h-7 w-7 cursor-pointer rounded-full'
                 />
