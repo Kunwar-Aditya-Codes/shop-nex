@@ -12,6 +12,7 @@ import Error from './pages/Error';
 import ViewOrders from './pages/ViewOrders';
 import Profile from './pages/Profile';
 import AccountLayout from './components/AccountLayout';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
   return (
@@ -32,9 +33,11 @@ function App() {
           <Route path='/orders/success/:token' element={<SuccessOrder />} />
 
           {/* Account Dashboard */}
-          <Route path='/account/:userId' element={<AccountLayout />}>
-            <Route path='profile' element={<Profile />} />
-            <Route path='view_orders' element={<ViewOrders />} />
+          <Route element={<RequireAuth />}>
+            <Route path='/account/:userId' element={<AccountLayout />}>
+              <Route path='profile' element={<Profile />} />
+              <Route path='view_orders' element={<ViewOrders />} />
+            </Route>
           </Route>
 
           {/* Error */}

@@ -71,7 +71,7 @@ const Login = () => {
       navigate('/products');
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message, {
+        toast.error(error.message, {
           id: 'login',
         });
         return;
