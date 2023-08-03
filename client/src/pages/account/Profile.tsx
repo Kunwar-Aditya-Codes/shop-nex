@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useBoundStore } from '../../app/store';
+import VerifyEmailModal from '../../components/VerifyEmailModal';
 
 type Customer = {
   _id: string;
@@ -12,6 +14,8 @@ type Customer = {
 
 const Profile = () => {
   const user = useBoundStore((state) => state.user) as Customer;
+
+  const [verifyEmailModel, setVerifyEmailModel] = useState<boolean>(false);
 
   return (
     <div className='mx-auto flex w-full max-w-4xl flex-col items-center space-y-16 lg:flex-row  lg:items-start lg:justify-between lg:space-y-0'>
@@ -39,7 +43,10 @@ const Profile = () => {
       </div>
       <div className='flex w-full flex-col items-center space-y-6 lg:w-auto'>
         {user?.isVerified ? null : (
-          <button className='w-full rounded-sm  border-2 border-zinc-800 px-8 py-3 font-light tracking-wider text-white transition ease-out hover:bg-zinc-900'>
+          <button
+            onClick={() => setVerifyEmailModel(true)}
+            className='w-full rounded-sm  border-2 border-zinc-800 px-8 py-3 font-light tracking-wider text-white transition ease-out hover:bg-zinc-900'
+          >
             Verify Email
           </button>
         )}
@@ -50,6 +57,8 @@ const Profile = () => {
           Edit Image
         </button>
       </div>
+
+      {verifyEmailModel ? <VerifyEmailModal setVerifyEmailModel={setVerifyEmailModel} /> : null}
     </div>
   );
 };

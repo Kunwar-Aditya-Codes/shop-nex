@@ -156,7 +156,7 @@ export const sendVerificationEmail = async (req: Request, res: Response) => {
   return res.status(200).json({
     success: true,
     message: 'Verification email sent',
-    info, // to be removed in production
+    info, //! to be removed in production
   });
 };
 
