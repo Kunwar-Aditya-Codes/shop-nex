@@ -1,8 +1,8 @@
 import { stripe } from '../config/stripe';
 import { Request, Response } from 'express';
-import { createOrder } from './order';
 import crypto from 'crypto';
 import Success from '../models/success';
+import Order from '../models/order';
 
 /**
  * @description Create a payment instance
@@ -22,7 +22,7 @@ export const checkout = async (req: Request, res: Response) => {
     });
   }
 
-  const { orderItems, customerEmail } = req.body;
+  const { orderItems, customerEmail, orderId } = req.body;
 
   if (!orderItems || orderItems.length === 0) {
     return res.status(203).json({
@@ -62,6 +62,7 @@ export const checkout = async (req: Request, res: Response) => {
   });
 
   const session = await stripe.checkout.sessions.create({
+    client_reference_id: orderId,
     success_url: `http://localhost:5173/orders/success/${successToken}`,
     cancel_url: 'http://localhost:5173/cart_orders',
     shipping_options: [
@@ -158,15 +159,29 @@ export const paymentUpdate = async (req: Request, res: Response) => {
   if (eventType === 'checkout.session.completed') {
     stripe.customers
       .retrieve(data.customer)
-      .then(async (customer) => {
+      .then(async (customer: any) => {
         try {
-          createOrder(customer, data);
+          // Update payment stajtus
+          const userId = customer.metadata.userId;
+          const orderId = data.client_reference_id;
+
+          // Find using orderId and update
+          await Order.findOneAndUpdate(
+            { _id: orderId, customerId: userId },
+            {
+              orderStatus: 'DISPATCHED',
+              paymentStatus: data.payment_status,
+              paymentMethod: data.payment_method_types[0],
+              shippingDetails: data.shipping_details,
+            },
+            { new: true }
+          );
         } catch (error) {
           console.log('>>err', error);
         }
       })
       .catch((err) => console.log(err));
 
-    res.sendStatus(200);
+    res.sendStatus(200).end();
   }
 };

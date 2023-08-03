@@ -1,4 +1,4 @@
-import { useBoundStore } from '../app/store';
+import { useBoundStore } from '../../app/store';
 
 type Customer = {
   _id: string;

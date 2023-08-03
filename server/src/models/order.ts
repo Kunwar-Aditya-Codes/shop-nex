@@ -32,7 +32,17 @@ const orderSchema = new mongoose.Schema<OrderAttributes>(
     },
 
     orderItems: [
-      // { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+      {
+        productId: {
+          // type: mongoose.Schema.Types.ObjectId,
+          // ref: 'Product',
+          // required: true,
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
+      },
     ],
 
     orderStatus: {
@@ -55,11 +65,11 @@ const orderSchema = new mongoose.Schema<OrderAttributes>(
 
     paymentMethod: {
       type: String,
-      required: true,
     },
 
     paymentStatus: {
       type: String,
+      default: 'PENDING',
       required: true,
     },
 

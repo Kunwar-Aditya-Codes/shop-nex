@@ -9,22 +9,24 @@ import { Request, Response } from 'express';
  * @param { } data
  * @returns { success, message, order } res
  */
-export const createOrder = async (customer: any, data: any) => {
-  const orderItems = JSON.parse(customer.metadata.cart);
-  const userId = customer.metadata.userId;
+export const createOrder = async (req: Request, res: Response) => {
+  const { userId } = req.params;
 
-  const totalAmount = data.amount_total;
-  const shippingDetails = data.shipping_details;
-  const paymentMethod = data.payment_method_types[0];
-  const paymentStatus = data.payment_status;
-
-  await Order.create({
-    orderItems,
+  const newOrder = await Order.create({
     customerId: userId,
-    totalAmount,
-    shippingDetails,
-    paymentMethod,
-    paymentStatus,
+    ...req.body,
+  });
+
+  if (!newOrder) {
+    return res.status(400).json({
+      success: false,
+      message: "Can't create order!",
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    newOrderId: newOrder._id,
   });
 };
 
@@ -49,6 +51,28 @@ export const getAllOrders = async (req: Request, res: Response) => {
     success: true,
     message: 'Orders retrieved successfully',
     orders,
+  });
+};
+
+/**
+ * @description Get order with orderId
+ * @access private
+ * @route GET /api/v1/order/:orderId
+ * @param { orderId } req
+ * @returns { success, message, order } res
+ */
+export const getOrderDetails = async (req: Request, res: Response) => {
+  const { orderId } = req.params;
+
+  const order = await Order.findById(orderId)
+    .populate('orderItems')
+    .lean()
+    .exec();
+
+  return res.status(200).json({
+    success: true,
+    message: 'order retrieved successfully',
+    order,
   });
 };
 

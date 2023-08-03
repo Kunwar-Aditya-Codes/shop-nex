@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
-import { useParams } from 'react-router-dom';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate, useParams } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { BsCircleFill } from 'react-icons/bs';
 
 interface Order {
   _id: string;
@@ -24,7 +25,10 @@ interface Order {
 
 const ViewOrders: FC = ({}) => {
   const { userId } = useParams();
+
+  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
+
   const formatDate = new Intl.DateTimeFormat('en-GB', {
     weekday: 'long',
     year: 'numeric',
@@ -42,6 +46,23 @@ const ViewOrders: FC = ({}) => {
     refetchOnWindowFocus: false,
   });
 
+  console.log(data);
+
+  const statusColor = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return 'text-amber-500';
+      case 'DELIVERED':
+        return 'text-green-500';
+      case 'DISPATCHED':
+        return 'text-blue-500';
+      case 'CANCELLED':
+        return 'text-red-500';
+      default:
+        return 'text-white';
+    }
+  };
+
   return (
     <div>
       {!isLoading ? (
@@ -58,7 +79,7 @@ const ViewOrders: FC = ({}) => {
                       # Order Id
                     </p>
                     <p className='text-lg  uppercase  tracking-wider '>
-                      {order._id.slice(-5)}
+                      {order._id}
                     </p>
                   </div>
                   <div className='space-y-1'>
@@ -73,8 +94,11 @@ const ViewOrders: FC = ({}) => {
                     <p className=' font-light uppercase italic tracking-wider text-zinc-500'>
                       # Order Status
                     </p>
-                    <p className='text-lg uppercase tracking-wider '>
-                      {order.orderStatus}
+                    <p className='flex items-center space-x-2 text-lg uppercase tracking-wider '>
+                      <BsCircleFill
+                        className={`${statusColor(order.orderStatus)} h-2 w-2`}
+                      />
+                      <span>{order.orderStatus}</span>
                     </p>
                   </div>
                 </div>
@@ -84,11 +108,16 @@ const ViewOrders: FC = ({}) => {
                       # Paid
                     </p>
                     <p className='text-2xl uppercase tracking-wider '>
-                      ₹ {order.totalAmount / 100}
+                      ₹ {order.totalAmount}
                     </p>
                   </div>
 
-                  <button className='rounded-sm bg-white px-4 py-2 font-medium text-black'>
+                  <button
+                    onClick={() => {
+                      navigate(`${order._id}`);
+                    }}
+                    className='rounded-sm bg-white px-4 py-2 font-medium text-black'
+                  >
                     View Order
                   </button>
                 </div>

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useBoundStore } from '../app/store';
 import CartCard from '../components/CartCard';
 import useAuth from '../hooks/useAuth';
@@ -23,6 +24,11 @@ const Cart = () => {
 
   const { id } = useAuth();
 
+  const orderItems = cartItems.map((item) => ({
+    productId: item.id,
+    quantity: item.quantity,
+  }));
+
   const axiosPrivate = useAxiosPrivate();
 
   const buy = async () => {
@@ -37,9 +43,15 @@ const Cart = () => {
       return;
     }
 
+    const orderResponse = await axiosPrivate.post(`/order/${id}/create`, {
+      orderItems,
+      totalAmount,
+    });
+
     const response = await axiosPrivate.post(`/session/${id}/checkout`, {
       orderItems: cartItems,
       customerEmail: userData.email,
+      orderId: orderResponse.data.newOrderId,
     });
 
     if (response.data.url) {
@@ -76,7 +88,7 @@ const Cart = () => {
           </button>
         </div>
       </div>
-      <div className='grid w-full grid-cols-1 divide-y-2 divide-zinc-900 lg:flex-[0.5] '>
+      <div className='grid w-full  grid-cols-1 divide-y-2 divide-zinc-900 lg:flex-[0.5] '>
         {cartItems.length > 0 ? (
           cartItems?.map((product) => (
             <CartCard
@@ -90,7 +102,17 @@ const Cart = () => {
             />
           ))
         ) : (
-          <h1>Empty Cart</h1>
+          <div className='flex flex-col items-center space-y-8  h-full  lg:items-start'>
+            <p className='text-lg font-medium uppercase tracking-widest'>
+              Cart looks empty :&#40;
+            </p>
+            <Link
+              to='/products'
+              className='rounded-md bg-white px-4 py-2 text-black'
+            >
+              Start Shopping
+            </Link>
+          </div>
         )}
       </div>
     </div>
