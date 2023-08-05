@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { useBoundStore } from "../app/store";
-import useRefreshToken from "../hooks/useRefreshToken";
-import { Outlet } from "react-router-dom";
-import usePersist from "../hooks/usePersist";
+import { useEffect, useState } from 'react';
+import { useBoundStore } from '../app/store';
+import useRefreshToken from '../hooks/useRefreshToken';
+import { Outlet } from 'react-router-dom';
+import usePersist from '../hooks/usePersist';
+import { TbLoader } from 'react-icons/tb';
 
 const PersistLogin = () => {
   const token = useBoundStore((state) => state.token);
@@ -34,7 +35,17 @@ const PersistLogin = () => {
   }, [token, persist, refresh]);
 
   return (
-    <>{!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}</>
+    <>
+      {!persist ? (
+        <Outlet />
+      ) : isLoading ? (
+        <div className='flex h-full flex-grow items-center justify-center '>
+          <TbLoader className='h-12 w-12 animate-spin' />
+        </div>
+      ) : (
+        <Outlet />
+      )}
+    </>
   );
 };
 export default PersistLogin;

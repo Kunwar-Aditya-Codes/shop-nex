@@ -8,12 +8,12 @@ import { verifyJwt } from '../middleware/verifyJwt';
 
 const router = Router();
 
+router.use(verifyJwt);
+
 router
   .route('/profile')
-  .get(verifyJwt, getProfile)
-  .patch(verifyJwt, updateProfile)
-  .delete(verifyJwt, deleteProfile);
+  .get(getProfile)
+  .patch(updateProfile)
+  .delete(deleteProfile);
 
 export default router;
-
-

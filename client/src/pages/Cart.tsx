@@ -69,15 +69,15 @@ const Cart = () => {
   return (
     <div className='mx-auto flex h-full w-full max-w-7xl flex-grow flex-col items-center space-y-8 p-6 lg:flex-row-reverse lg:items-start lg:space-y-0'>
       <div className='flex w-full items-center justify-center lg:flex-[0.5]  lg:justify-end'>
-        <div className=' flex w-full flex-col  space-y-4 rounded-md  border border-zinc-900 p-4 shadow-lg lg:w-[25rem] '>
+        <div className='flex w-full flex-col  space-y-4 rounded-md  border border-zinc-900 p-4 shadow-lg lg:w-[25rem] '>
           <h1 className='text-2xl font-semibold uppercase tracking-wide  text-zinc-700 '>
             Cart Summary
           </h1>
-          <p className='text-start  font-light tracking-wider'>
+          <p className='text-start font-light tracking-wider'>
             Total Items: <span className=''>{totalItems}</span>
           </p>
-          <p className='text-start  font-light tracking-wider'>
-            Total Amount: <span className=''> ${totalAmount}</span>
+          <p className='text-start font-light tracking-wider'>
+            Total Amount: <span className=''>₹ {totalAmount}</span>
           </p>
           <button
             onClick={buy}
@@ -102,8 +102,8 @@ const Cart = () => {
             />
           ))
         ) : (
-          <div className='flex flex-col items-center space-y-8  h-full  lg:items-start'>
-            <p className='text-lg font-medium uppercase tracking-widest'>
+          <div className='flex h-full flex-col items-center  space-y-8  lg:items-start'>
+            <p className='text-lg font-light uppercase tracking-widest'>
               Cart looks empty :&#40;
             </p>
             <Link

@@ -21,6 +21,7 @@ connectDb();
 
 app.use(
   express.json({
+    limit: '20mb',
     verify: (req: Request, res, buf) => {
       req.rawBody = buf;
     },

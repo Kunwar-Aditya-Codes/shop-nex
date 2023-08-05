@@ -1,3 +1,4 @@
+import cloundinary from '../config/cloudinary';
 import Customer from '../models/customer';
 import { Request, Response } from 'express';
 
@@ -53,15 +54,28 @@ export const updateProfile = async (req: Request, res: Response) => {
     });
   }
 
-  // const updatedCustomer = await Customer.update(
-  //   { ...req.body },
-  //   { where: { userId: id } }
-  // );
+  const { profileImage, _id } = req.body;
 
-  const updatedCustomer = await Customer.findByIdAndUpdate(id, {
-    ...req.body,
-  });
+  if (id !== _id) {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized!',
+    });
+  }
 
+  let updateData = { ...req.body };
+
+  if (profileImage) {
+    const uploadResponse = await cloundinary.uploader.upload(profileImage, {
+      upload_preset: 'shop-nex',
+    });
+
+    updateData.profileImage = uploadResponse.secure_url;
+  }
+
+  const updatedCustomer = await Customer.findByIdAndUpdate(id, updateData, {
+    new: true, // Return the updated document
+  }).select('-password');
   return res.status(200).json({
     success: true,
     customer: updatedCustomer,

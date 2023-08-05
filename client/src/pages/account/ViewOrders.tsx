@@ -46,8 +46,6 @@ const ViewOrders: FC = ({}) => {
     refetchOnWindowFocus: false,
   });
 
-  console.log(data);
-
   const statusColor = (status: string) => {
     switch (status) {
       case 'PENDING':
@@ -67,63 +65,73 @@ const ViewOrders: FC = ({}) => {
     <div>
       {!isLoading ? (
         !error ? (
-          <div className='grid grid-cols-1 lg:grid-cols-2'>
-            {data?.orders?.map((order: Order) => (
-              <div
-                key={order._id}
-                className='mb-8 flex  flex-col divide-y-2 divide-zinc-800 rounded-md border-b-2  border-r-2 border-zinc-900  bg-gradient-to-br  from-zinc-900 px-8  py-6 shadow-lg lg:ml-6 lg:mt-0 '
-              >
-                <div className='space-y-4 '>
-                  <div className=' space-y-1'>
-                    <p className=' font-light uppercase italic tracking-wider text-zinc-500'>
-                      # Order Id
-                    </p>
-                    <p className='text-lg  uppercase  tracking-wider '>
-                      {order._id}
-                    </p>
-                  </div>
-                  <div className='space-y-1'>
-                    <p className=' font-light uppercase italic tracking-wider text-zinc-500'>
-                      # Delivery Date
-                    </p>
-                    <p className=' text-lg uppercase  tracking-wider '>
-                      {formatDate.format(new Date(order.orderDate))}
-                    </p>
-                  </div>
-                  <div className='space-y-1'>
-                    <p className=' font-light uppercase italic tracking-wider text-zinc-500'>
-                      # Order Status
-                    </p>
-                    <p className='flex items-center space-x-2 text-lg uppercase tracking-wider '>
-                      <BsCircleFill
-                        className={`${statusColor(order.orderStatus)} h-2 w-2`}
-                      />
-                      <span>{order.orderStatus}</span>
-                    </p>
-                  </div>
-                </div>
-                <div className='mt-4 flex h-full flex-col justify-between space-y-8 py-4 '>
-                  <div className='space-y-1'>
-                    <p className=' text-lg font-medium uppercase italic tracking-wider text-zinc-500'>
-                      # Paid
-                    </p>
-                    <p className='text-2xl uppercase tracking-wider '>
-                      ₹ {order.totalAmount}
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      navigate(`${order._id}`);
-                    }}
-                    className='rounded-sm bg-white px-4 py-2 font-medium text-black'
+          <>
+            {data.orders.length > 0 ? (
+              <div className='grid grid-cols-1 lg:grid-cols-2'>
+                {data?.orders?.map((order: Order) => (
+                  <div
+                    key={order._id}
+                    className='mb-8 flex  flex-col divide-y-2 divide-zinc-800 rounded-md border-b-2  border-r-2 border-zinc-900  bg-gradient-to-br  from-zinc-900 px-8  py-6 shadow-lg lg:ml-6 lg:mt-0 '
                   >
-                    View Order
-                  </button>
-                </div>
+                    <div className='space-y-4 '>
+                      <div className=' space-y-1'>
+                        <p className=' font-light uppercase italic tracking-wider text-zinc-500'>
+                          # Order Id
+                        </p>
+                        <p className='text-lg  uppercase  tracking-wider '>
+                          {order._id}
+                        </p>
+                      </div>
+                      <div className='space-y-1'>
+                        <p className=' font-light uppercase italic tracking-wider text-zinc-500'>
+                          # Delivery Date
+                        </p>
+                        <p className=' text-lg uppercase  tracking-wider '>
+                          {formatDate.format(new Date(order.orderDate))}
+                        </p>
+                      </div>
+                      <div className='space-y-1'>
+                        <p className=' font-light uppercase italic tracking-wider text-zinc-500'>
+                          # Order Status
+                        </p>
+                        <p className='flex items-center space-x-2 text-lg uppercase tracking-wider '>
+                          <BsCircleFill
+                            className={`${statusColor(
+                              order.orderStatus
+                            )} h-2 w-2`}
+                          />
+                          <span>{order.orderStatus}</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className='mt-4 flex h-full flex-col justify-between space-y-8 py-4 '>
+                      <div className='space-y-1'>
+                        <p className=' text-lg font-medium uppercase italic tracking-wider text-zinc-500'>
+                          # Paid
+                        </p>
+                        <p className='text-2xl uppercase tracking-wider '>
+                          ₹ {order.totalAmount}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          navigate(`${order._id}`);
+                        }}
+                        className='rounded-sm bg-white px-4 py-2 font-medium text-black'
+                      >
+                        View Order
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            ) : (
+              <p className='text-center text-lg font-light uppercase tracking-wider'>
+                No orders yet!
+              </p>
+            )}
+          </>
         ) : (
           <p className='flex items-center justify-center text-2xl font-medium uppercase tracking-wider'>
             Error fetching products.
