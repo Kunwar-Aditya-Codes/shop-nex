@@ -1,3 +1,4 @@
+import cloundinary from '../config/cloudinary';
 import Product from '../models/product';
 import { Request, Response } from 'express';
 
@@ -9,9 +10,9 @@ import { Request, Response } from 'express';
  * @returns { success, message, product } res
  */
 export const createProduct = async (req: Request, res: Response) => {
-  const { role } = req;
+  const { isAdmin } = req;
 
-  if (role !== 'admin') {
+  if (!isAdmin) {
     return res.status(403).json({
       success: false,
       message: 'Unauthorized',
@@ -22,8 +23,8 @@ export const createProduct = async (req: Request, res: Response) => {
     productName,
     productDescription,
     price = 0.0,
-    stock = 0,
     category,
+    productImage,
   } = req.body;
 
   if (!productName || !productDescription) {
@@ -33,18 +34,21 @@ export const createProduct = async (req: Request, res: Response) => {
     });
   }
 
-  const product = await Product.create({
+  const uploadResponse = await cloundinary.uploader.upload(productImage, {
+    upload_preset: 'shop-nex',
+  });
+
+  await Product.create({
     productName,
     productDescription,
     price,
-    stock,
     category,
+    productImage: uploadResponse.secure_url,
   });
 
   return res.status(201).json({
     success: true,
     message: 'Product created successfully',
-    product, // remove this in production
   });
 };
 
@@ -105,9 +109,9 @@ export const getSingleProduct = async (req: Request, res: Response) => {
  * @returns { success, message } res
  */
 export const updateProduct = async (req: Request, res: Response) => {
-  const { role } = req;
+  const { isAdmin } = req;
 
-  if (role !== 'admin') {
+  if (!isAdmin) {
     return res.status(403).json({
       success: false,
       message: 'Unauthorized',
@@ -141,9 +145,9 @@ export const updateProduct = async (req: Request, res: Response) => {
  * @returns { success, message } res
  */
 export const deleteProduct = async (req: Request, res: Response) => {
-  const { role } = req;
+  const { isAdmin } = req;
 
-  if (role !== 'admin') {
+  if (!isAdmin) {
     return res.status(403).json({
       success: false,
       message: 'Unauthorized',

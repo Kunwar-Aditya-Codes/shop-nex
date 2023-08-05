@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 export interface CustomerAttributes extends Schema {
   firstName: string;
@@ -6,7 +6,7 @@ export interface CustomerAttributes extends Schema {
   email: string;
   password: string;
   profileImage: string;
-  address: string[];
+  isAdmin: boolean;
   isVerified: boolean;
 }
 
@@ -35,6 +35,11 @@ const customerSchema = new mongoose.Schema<CustomerAttributes>(
       unique: true,
     },
 
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+
     password: {
       type: String,
       required: true,
@@ -43,12 +48,7 @@ const customerSchema = new mongoose.Schema<CustomerAttributes>(
     profileImage: {
       type: String,
       default:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    },
-
-    address: {
-      type: [String],
-      required: true,
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
     },
 
     isVerified: {
@@ -61,6 +61,6 @@ const customerSchema = new mongoose.Schema<CustomerAttributes>(
   }
 );
 
-const Customer = mongoose.model("Customer", customerSchema);
+const Customer = mongoose.model('Customer', customerSchema);
 
 export default Customer;

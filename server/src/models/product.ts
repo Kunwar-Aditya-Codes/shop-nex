@@ -5,10 +5,7 @@ export interface ProductAttributes extends Schema {
   productDescription: string;
   price: number;
   productImage: string;
-  category: string[];
-  stock: number;
-  variants: string[];
-  orders: mongoose.Schema.Types.ObjectId[];
+  category: string;
 }
 
 const productSchema = new mongoose.Schema<ProductAttributes>(
@@ -33,7 +30,7 @@ const productSchema = new mongoose.Schema<ProductAttributes>(
     },
 
     category: {
-      type: [String],
+      type: String,
     },
   },
   {

@@ -72,9 +72,9 @@ const OrderDetails: FC<OrderDetailsProps> = ({}) => {
               # Shipping Details
             </span>
             <div className='flex flex-col text-zinc-400'>
-              <span>{orderDetails.shippingDetails.name}</span>
-              <span>{orderDetails.shippingDetails.address.line1}</span>
-              <span>{orderDetails.shippingDetails.address.line2}</span>
+              <span>{orderDetails?.shippingDetails?.name}</span>
+              <span>{orderDetails?.shippingDetails?.address.line1}</span>
+              <span>{orderDetails?.shippingDetails?.address.line2}</span>
             </div>
           </div>
           <div className='flex flex-col space-y-1'>
@@ -89,11 +89,11 @@ const OrderDetails: FC<OrderDetailsProps> = ({}) => {
               <div key={product.id} className='flex items-start space-x-4 '>
                 <img
                   src={product.image}
-                  alt={product.name}
+                  alt={product?.name}
                   className='h-[6rem] w-[10rem] rounded-md'
                 />
                 <div className='mt-0 pt-0 text-zinc-400'>
-                  <p className='text-lg tracking-wider'>{product.name}</p>
+                  <p className='text-lg tracking-wider'>{product?.name}</p>
                   <p className='tracking-wider'>12245</p>
                   <div className='flex items-center space-x-2'>
                     <p>Quantity:</p>

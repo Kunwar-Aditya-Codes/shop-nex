@@ -14,6 +14,8 @@ import Profile from './pages/account/Profile';
 import AccountLayout from './components/AccountLayout';
 import RequireAuth from './components/RequireAuth';
 import OrderDetails from './pages/account/OrderDetails';
+import DashboardLayout from './components/DashboardLayout';
+import AllProducts from './pages/admin/AllProducts';
 
 function App() {
   return (
@@ -24,21 +26,40 @@ function App() {
           <Route path='/sign_in' element={<Login />} />
           <Route path='/sign_up' element={<Register />} />
           <Route index element={<Home />} />
-
           {/* Products & Brands */}
           <Route path='/products' element={<Products />} />
           <Route path='/product_brands' element={<Brands />} />
-
           {/* Cart & Payments */}
           <Route path='/cart_orders' element={<Cart />} />
           <Route path='/orders/success/:token' element={<SuccessOrder />} />
 
-          {/* Account Dashboard */}
           <Route element={<RequireAuth />}>
+            {/* Profile Panel */}
             <Route path='/account/:userId' element={<AccountLayout />}>
               <Route path='profile' element={<Profile />} />
               <Route path='view_orders' element={<ViewOrders />} />
               <Route path='view_orders/:orderId' element={<OrderDetails />} />
+              <Route
+                path='*'
+                element={
+                  <p className='text-center text-2xl font-light tracking-wider'>
+                    Work under progress...
+                  </p>
+                }
+              />
+            </Route>
+
+            {/* Admin Panel */}
+            <Route path='/admin/:userId' element={<DashboardLayout />}>
+              <Route path='all_products' element={<AllProducts />} />
+              <Route
+                path='*'
+                element={
+                  <p className='text-center text-2xl font-light tracking-wider'>
+                    Work under progress...
+                  </p>
+                }
+              />
             </Route>
           </Route>
 

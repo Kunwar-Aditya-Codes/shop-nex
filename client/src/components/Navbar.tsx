@@ -1,10 +1,4 @@
-import {
-  IoMenu,
-  IoCartOutline,
-  IoSearchOutline,
-  IoCloseOutline,
-  IoLogOutOutline,
-} from 'react-icons/io5';
+import { IoMenu, IoCartOutline, IoCloseOutline } from 'react-icons/io5';
 import { LuLogOut } from 'react-icons/lu';
 import { useEffect, useState } from 'react';
 import logo from '../assets/logo.png';
@@ -19,7 +13,7 @@ type Customer = {
   lastName: string;
   isVerified: boolean;
   email: string;
-  address: string[];
+  isAdmin: boolean;
   profileImage: string;
 } | null;
 
@@ -148,6 +142,15 @@ const Navbar = () => {
                   alt='profile-image'
                   className='h-7 w-7 cursor-pointer rounded-full'
                 />
+
+                {user?.isAdmin ? (
+                  <Link
+                    to={`/admin/${user._id}/all_products`}
+                    className='rounded-md border border-zinc-900 px-3 py-1 hover:bg-zinc-900'
+                  >
+                    Admin
+                  </Link>
+                ) : null}
 
                 <LuLogOut onClick={logout} className='h-5 w-5 cursor-pointer' />
               </div>

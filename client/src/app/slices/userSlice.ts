@@ -9,7 +9,7 @@ export interface UserSlice {
       lastName: string;
       isVerified: boolean;
       email: string;
-      address: string[];
+      isAdmin: boolean;
       profileImage: string;
     } | null
   ) => void;

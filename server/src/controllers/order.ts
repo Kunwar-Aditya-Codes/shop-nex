@@ -42,6 +42,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
 
   const orders = await Order.find({
     customerId: userId,
+    paymentStatus: 'paid',
   })
     .populate('orderItems')
     .lean()
@@ -84,9 +85,9 @@ export const getOrderDetails = async (req: Request, res: Response) => {
  * @returns { success, message, orders } res
  */
 export const getAllOrdersForAdmin = async (req: Request, res: Response) => {
-  const { role } = req;
+  const { isAdmin } = req;
 
-  if (role !== 'admin') {
+  if (!isAdmin) {
     return res.status(403).json({
       success: false,
       message: 'Unauthorized',
@@ -110,11 +111,11 @@ export const getAllOrdersForAdmin = async (req: Request, res: Response) => {
  * @returns { success, message } res
  */
 export const updateOrderStatus = async (req: Request, res: Response) => {
-  const { role } = req;
+  const { isAdmin } = req;
   const { orderId } = req.params;
   const { status } = req.body;
 
-  if (role !== 'admin') {
+  if (!isAdmin) {
     return res.status(403).json({
       success: false,
       message: 'Unauthorized',

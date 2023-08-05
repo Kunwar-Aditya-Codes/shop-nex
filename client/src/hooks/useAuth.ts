@@ -1,25 +1,25 @@
-import { useBoundStore } from "../app/store";
-import jwtDecode from "jwt-decode";
+import { useBoundStore } from '../app/store';
+import jwtDecode from 'jwt-decode';
 
 type Decoded = {
   id: string;
-  role: string;
+  isAdmin: boolean;
 };
 
 const useAuth = () => {
   const token = useBoundStore((state) => state.token);
   let id;
-  let role;
+  let isAdmin;
 
   if (token && token !== undefined) {
     const decoded: Decoded = jwtDecode(token);
     id = decoded.id;
-    role = decoded.role;
+    isAdmin = decoded.isAdmin;
 
-    return { id, role };
+    return { id, isAdmin };
   }
 
-  return { id, role };
+  return { id, isAdmin };
 };
 
 export default useAuth;

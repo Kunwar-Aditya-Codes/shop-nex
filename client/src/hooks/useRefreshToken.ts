@@ -8,6 +8,7 @@ const useRefreshToken = () => {
   const refreshToken = async () => {
     const response = await axiosInstance.get('/auth/refresh_token');
 
+
     const accessToken = response.data?.accessToken as string;
 
     setToken(accessToken);

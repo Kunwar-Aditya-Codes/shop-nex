@@ -44,7 +44,7 @@ export const register = async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken } = generateTokens({
     id: newCustomer._id.toString(),
-    role: 'customer',
+    isAdmin: newCustomer.isAdmin,
   });
 
   res.cookie('refreshToken', refreshToken, {
@@ -57,7 +57,6 @@ export const register = async (req: Request, res: Response) => {
   return res.status(201).json({
     success: true,
     accessToken,
-    newCustomer, // to be removed in production
   });
 };
 
@@ -98,7 +97,7 @@ export const login = async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken } = generateTokens({
     id: foundCustomer._id.toString(),
-    role: 'customer',
+    isAdmin: foundCustomer.isAdmin,
   });
 
   res.cookie('refreshToken', refreshToken, {
@@ -111,7 +110,6 @@ export const login = async (req: Request, res: Response) => {
   return res.status(200).json({
     success: true,
     accessToken,
-    foundCustomer, // to be removed in production
   });
 };
 
@@ -223,43 +221,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
 };
 
 /**
- * @description Login admin
- * @access public
- * @route POST /api/v1/auth/admin/sign_in
- * @param { email , password } req
- * @returns { success , accesstoken , refreshtoken in cookie } res
- */
-export const adminLogin = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
-  if (email !== adminEmail || password !== adminPassword) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid credentials',
-    });
-  }
-
-  const { accessToken, refreshToken } = generateTokens({
-    id: '39f0432c-b949-438c-aed6-e4d759f19a76',
-    role: 'admin',
-  });
-
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    path: '/api/v1/auth/refresh_token',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
-
-  return res.status(200).json({
-    success: true,
-    accessToken,
-  });
-};
-
-/**
  * @description Refresh Token
  * @access private
  * @route POST /api/v1/auth/refresh_token
@@ -291,21 +252,13 @@ export const refreshToken = async (req: Request, res: Response) => {
     }
   }
 
-  const { id, role } = decoded as { id: string; role: string };
+  const { id, isAdmin } = decoded as { id: string; isAdmin: boolean };
 
-  let foundUser;
-
-  if (role === 'customer') {
-    foundUser = await Customer.findOne({
-      _id: id,
-    })
-      .lean()
-      .exec();
-  }
+  const foundUser = await Customer.findById(id).lean().exec();
 
   const { accessToken, refreshToken: newRefreshToken } = generateTokens({
     id,
-    role,
+    isAdmin,
   });
 
   res.cookie('refreshToken', newRefreshToken, {
