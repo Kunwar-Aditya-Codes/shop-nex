@@ -55,11 +55,22 @@ app.use('/api/v1/session', payments);
 /**@description Success routes */
 app.use('/api/v1/verify', success);
 
-__dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'client/dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+// Serve static client-side files
+const clientDistPath = path.join(__dirname, '../../client/dist');
+app.use(express.static(clientDistPath));
+
+// Catch-all route for client-side
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
 });
+
+// __dirname = path.resolve();
+
+// console.log(__dirname);
+// app.use(express.static(path.join(__dirname, 'client/dist')));
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+// });
 
 mongoose.connection.on('connected', () => {
   console.log('Connected to MongoDB');
