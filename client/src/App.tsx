@@ -21,9 +21,9 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path='/' element={<PersistLogin />}>
+        <Route element={<PersistLogin />}>
           {/* Auth */}
-          <Route index element={<Home />} />
+          <Route index path='/' element={<Home />} />
           <Route path='/sign_in' element={<Login />} />
           <Route path='/sign_up' element={<Register />} />
           {/* Products & Brands */}
