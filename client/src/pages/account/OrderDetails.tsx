@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import { allProducts } from '../../misc/productsCardData';
 
 interface OrderDetailsProps {}
 
@@ -30,7 +29,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({}) => {
 
   const axiosPrivate = useAxiosPrivate();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['order_history', orderId],
     queryFn: async () => {
       const response = await axiosPrivate.get(`order/${orderId}`);
@@ -43,20 +42,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({}) => {
 
   const orderDetails: Order = data?.order;
 
-  //! Update the code later after product create api
-  const filteredProducts = allProducts
-    .filter((product) =>
-      orderDetails?.orderItems.some(
-        (item: any) => item.productId.toString() === product.id.toString()
-      )
-    )
-    .map((product) => {
-      const orderItem: any = orderDetails.orderItems.find(
-        (item: any) => item.productId.toString() === product.id.toString()
-      );
-      return { ...product, quantity: orderItem ? orderItem?.quantity : 0 };
-    });
-
+  
   return (
     <div>
       {isLoading ? (
@@ -85,16 +71,23 @@ const OrderDetails: FC<OrderDetailsProps> = ({}) => {
           </div>
           <div className='flex flex-col space-y-2'>
             <span className='text-lg font-bold tracking-wider'># Products</span>
-            {filteredProducts.map((product) => (
-              <div key={product.id} className='flex items-start space-x-4 '>
+            {orderDetails?.orderItems.map((product: any) => (
+              <div
+                key={product.productId._id}
+                className='flex items-start space-x-4 '
+              >
                 <img
-                  src={product.image}
-                  alt={product?.name}
+                  src={product.productId.productImage}
+                  alt={product?.productId.productName}
                   className='h-[6rem] w-[10rem] rounded-md'
                 />
                 <div className='mt-0 pt-0 text-zinc-400'>
-                  <p className='text-lg tracking-wider'>{product?.name}</p>
-                  <p className='tracking-wider'>12245</p>
+                  <p className='text-lg tracking-wider'>
+                    {product?.productId.productName}
+                  </p>
+                  <p className='tracking-wider'>
+                    {product.productId._id.slice(-8)}
+                  </p>
                   <div className='flex items-center space-x-2'>
                     <p>Quantity:</p>
                     <p>{product.quantity}</p>

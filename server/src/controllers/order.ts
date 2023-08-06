@@ -66,7 +66,7 @@ export const getOrderDetails = async (req: Request, res: Response) => {
   const { orderId } = req.params;
 
   const order = await Order.findById(orderId)
-    .populate('orderItems')
+    .populate('orderItems.productId')
     .lean()
     .exec();
 

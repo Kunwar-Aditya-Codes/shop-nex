@@ -25,7 +25,7 @@ const Cart = () => {
   const { id } = useAuth();
 
   const orderItems = cartItems.map((item) => ({
-    productId: item.id,
+    productId: item._id,
     quantity: item.quantity,
   }));
 
@@ -93,9 +93,8 @@ const Cart = () => {
           cartItems?.map((product) => (
             <CartCard
               price={product.price}
-              key={product.id}
-              rating={product.rating}
-              productId={product.id}
+              key={product._id}
+              productId={product._id}
               productImage={product.image}
               productName={product.name}
               quantity={product.quantity}

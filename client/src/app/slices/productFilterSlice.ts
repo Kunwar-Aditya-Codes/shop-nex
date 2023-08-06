@@ -1,10 +1,10 @@
 import { StateCreator } from 'zustand';
 
 export interface ProductFilterSlice {
-  rating: number;
   price: number;
-  setRating: (rating: number) => void;
+  category: string;
   setPrice: (price: number) => void;
+  setCategory: (category: string) => void;
 }
 
 const createProductFilterSlice: StateCreator<
@@ -13,10 +13,10 @@ const createProductFilterSlice: StateCreator<
   [],
   ProductFilterSlice
 > = (set) => ({
-  rating: 0,
   price: 0,
-  setRating: (rating) => set((state) => ({ ...state, rating })),
+  category: '',
   setPrice: (price) => set((state) => ({ ...state, price })),
+  setCategory: (category) => set((state) => ({ ...state, category })),
 });
 
 export default createProductFilterSlice;

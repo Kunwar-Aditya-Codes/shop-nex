@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import CategoryCard from '../components/CategoryCard';
 import { categoryCardData } from '../misc/categoryCardData';
 import { BsArrowRight } from 'react-icons/bs';
-import { productsCardData } from '../misc/productsCardData';
-import ProductCard from '../components/ProductCard';
 
 const Home = () => {
   return (
@@ -65,16 +63,9 @@ const Home = () => {
               className='flex w-max flex-nowrap items-center justify-between space-x-4 p-4 lg:w-full  lg:space-x-0 lg:p-0
             '
             >
-              {productsCardData.map((item) => (
-                <ProductCard
-                  key={item.id}
-                  id={item.id}
-                  image={item.image}
-                  name={item.name}
-                  rating={item.rating}
-                  price={item.price}
-                />
-              ))}
+              <p className='text-lg font-light uppercase tracking-wider'>
+                Comming Soon...
+              </p>
             </div>
           </div>
         </>

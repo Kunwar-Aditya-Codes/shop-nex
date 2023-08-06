@@ -34,9 +34,9 @@ const orderSchema = new mongoose.Schema<OrderAttributes>(
     orderItems: [
       {
         productId: {
-          // type: mongoose.Schema.Types.ObjectId,
-          // ref: 'Product',
-          // required: true,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
         },
         quantity: {
           type: Number,

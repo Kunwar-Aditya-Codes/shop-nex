@@ -1,26 +1,43 @@
-import { allProducts } from '../misc/productsCardData';
 import ProductCard from '../components/ProductCard';
 import { useState } from 'react';
 import Filter from '../components/Filter';
 import { HiOutlineAdjustmentsHorizontal } from 'react-icons/hi2';
 import { useBoundStore } from '../app/store';
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '../lib/api/axiosConfig';
 
 interface Product {
-  id: number;
-  name: string;
+  _id: string;
+  productName: string;
   price: number;
-  image: string;
-  rating: number;
+  productImage: string;
+  category: string;
 }
 
 const Products = () => {
   const [filterShow, setFilterShow] = useState(false);
-  const price = useBoundStore((state) => state.price);
-  const rating = useBoundStore((state) => state.rating);
 
-  const filteredProducts: Product[] = allProducts.filter((product) => {
-    return product.rating >= rating && product.price >= price;
+  const price = useBoundStore((state) => state.price);
+  const category = useBoundStore((state) => state.category);
+
+  const { data } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const response = await axiosInstance.get('/product/all');
+      return response.data;
+    },
+    refetchInterval: 10000,
   });
+
+  const filteredProducts: Product[] = data?.products?.filter(
+    (product: Product) => {
+      if (!category) {
+        return product;
+      }
+
+      return product.price >= price && product.category === category;
+    }
+  );
 
   return (
     <div className='relative mx-auto mb-6 mt-8 flex w-full max-w-7xl justify-center p-4 md:justify-end'>
@@ -38,14 +55,13 @@ const Products = () => {
       </div>
       {/* Products */}
       <div className='grid grid-cols-1 justify-items-center gap-8 px-4 md:flex-[0.8] md:grid-cols-2 lg:justify-items-start xl:grid-cols-3'>
-        {filteredProducts.map((product) => (
+        {filteredProducts?.map((product) => (
           <ProductCard
-            key={product.id}
-            id={product.id}
-            image={product.image}
-            name={product.name}
+            key={product._id}
+            _id={product._id}
+            image={product.productImage}
+            name={product.productName}
             price={product.price}
-            rating={product.rating}
           />
         ))}
       </div>

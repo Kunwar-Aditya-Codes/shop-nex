@@ -1,15 +1,13 @@
-import { BsStarFill } from 'react-icons/bs';
 import { useBoundStore } from '../app/store';
 
 interface ProductCardProps {
-  id: number;
+  _id: string;
   image: string;
   name: string;
-  rating: number;
   price: number;
 }
 
-const ProductCard = ({ image, name, rating, price, id }: ProductCardProps) => {
+const ProductCard = ({ image, name, price, _id }: ProductCardProps) => {
   const addProduct = useBoundStore((state) => state.addProducts);
 
   return (
@@ -23,19 +21,10 @@ const ProductCard = ({ image, name, rating, price, id }: ProductCardProps) => {
         <h1 className='text-2xl font-medium uppercase tracking-wider'>
           {name}
         </h1>
-        <div className='flex items-center space-x-1'>
-          {Array(rating)
-            .fill('')
-            .map((_, i) => (
-              <BsStarFill key={i} className='text-yellow-400' />
-            ))}
-        </div>
         <h1 className=' font-light uppercase tracking-wider'>₹ {price}.00</h1>
       </div>
       <button
-        onClick={() =>
-          addProduct({ id, image, name, price, rating, quantity: 1 })
-        }
+        onClick={() => addProduct({ _id, image, name, price, quantity: 1 })}
         className='w-full rounded-b-sm bg-white/75 py-2  tracking-wide text-black transition ease-out hover:bg-white'
       >
         Add to cart

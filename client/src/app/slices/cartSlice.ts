@@ -4,22 +4,20 @@ export interface CartSlice {
   totalAmount: number;
   totalItems: number;
   products: {
-    id: number;
+    _id: string;
     name: string;
     price: number;
     image: string;
-    rating: number;
     quantity: number;
   }[];
   addProducts: (product: {
-    id: number;
+    _id: string;
     name: string;
     price: number;
     image: string;
-    rating: number;
     quantity: number;
   }) => void;
-  removeProducts: (productId: number) => void;
+  removeProducts: (productId: string) => void;
   calculateTotalItemsAndAmount: () => void;
   clearCart: () => void;
 }
@@ -30,11 +28,11 @@ const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
   totalItems: 0,
   addProducts: (product) =>
     set((state) => {
-      const existingProduct = state.products.find((p) => p.id === product.id);
+      const existingProduct = state.products.find((p) => p._id === product._id);
 
       const updatedProducts = existingProduct
         ? state.products.map((p) =>
-            p.id === product.id
+            p._id === product._id
               ? { ...p, quantity: p.quantity + product.quantity }
               : p
           )
@@ -54,7 +52,7 @@ const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 
   removeProducts: (productId) =>
     set((state) => {
-      const existingProduct = state.products.find((p) => p.id === productId);
+      const existingProduct = state.products.find((p) => p._id === productId);
 
       if (!existingProduct) {
         return state;
@@ -62,9 +60,9 @@ const createCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 
       const updatedProducts =
         existingProduct.quantity === 1
-          ? state.products.filter((p) => p.id !== productId)
+          ? state.products.filter((p) => p._id !== productId)
           : state.products.map((p) =>
-              p.id === productId ? { ...p, quantity: p.quantity - 1 } : p
+              p._id === productId ? { ...p, quantity: p.quantity - 1 } : p
             );
 
       const updatedTotalAmount = state.totalAmount - existingProduct.price;

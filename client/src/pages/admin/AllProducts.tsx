@@ -1,21 +1,49 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useState } from 'react';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import AddProductModel from '../../components/AddProductModel';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
+import { toast } from 'react-hot-toast';
 
 interface AllProductsProps {}
 
 const AllProducts: FC<AllProductsProps> = ({}) => {
   const axiosPrivate = useAxiosPrivate();
+  const queryClient = useQueryClient();
 
   const [addProductModel, setAddProductModel] = useState<boolean>(false);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
       const response = await axiosPrivate.get('/product/all');
       return response.data;
+    },
+  });
+
+  const deleteProduct = async (productId: string) => {
+    toast.loading('Deleting...', {
+      id: 'delete-product',
+    });
+
+    try {
+      await axiosPrivate.delete(`/product/admin/${productId}`);
+
+      toast.success('Delete Success', {
+        id: 'delete-product',
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error('Error', {
+        id: 'delete-product',
+      });
+    }
+  };
+
+  const mutation = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
     },
   });
 
@@ -84,7 +112,12 @@ const AllProducts: FC<AllProductsProps> = ({}) => {
                     {product.category}
                   </td>
                   <td className='flex w-full items-center justify-center'>
-                    <MdOutlineDeleteOutline className='h-5 w-5 text-red-500' />
+                    <MdOutlineDeleteOutline
+                      onClick={() => {
+                        mutation.mutate(product._id);
+                      }}
+                      className='h-5 w-5 cursor-pointer text-red-500'
+                    />
                   </td>
                 </tr>
               ))}
