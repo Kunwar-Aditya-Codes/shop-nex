@@ -1,11 +1,13 @@
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://localhost:4000/api/v1',
-  withCredentials: true
+  // baseURL: 'http://localhost:4000/api/v1',
+  baseURL: 'https://shop-nex.onrender.com/api/v1',
+  withCredentials: true,
 });
 
 export const privateAxiosInstance = axios.create({
-  baseURL: 'http://localhost:4000/api/v1',
+  // baseURL: 'http://localhost:4000/api/v1',
+  baseURL: 'https://shop-nex.onrender.com/api/v1',
   withCredentials: true,
 });

@@ -30,13 +30,13 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-    allowedHeaders: 'Content-Type, Authorization',
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'http://localhost:5173',
+//     credentials: true,
+//     allowedHeaders: 'Content-Type, Authorization',
+//   })
+// );
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Shop Nex Express Server');
