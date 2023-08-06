@@ -38,10 +38,6 @@ app.use(cookieParser());
 //   })
 // );
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Shop Nex Express Server');
-});
-
 /** @description Auth routes */
 app.use('/api/v1/auth', auth);
 /**@description Customer routes */
