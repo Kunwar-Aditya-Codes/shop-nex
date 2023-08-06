@@ -63,8 +63,8 @@ export const checkout = async (req: Request, res: Response) => {
 
   const session = await stripe.checkout.sessions.create({
     client_reference_id: orderId,
-    success_url: `http://localhost:5173/orders/success/${successToken}`,
-    cancel_url: 'http://localhost:5173/cart_orders',
+    success_url: `https://shop-nex.onrender.com/orders/success/${successToken}`,
+    cancel_url: 'https://shop-nex.onrender.com/cart_orders',
     shipping_options: [
       {
         shipping_rate_data: {
