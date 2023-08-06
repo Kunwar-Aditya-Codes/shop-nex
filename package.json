@@ -7,6 +7,6 @@
   "license": "MIT",
   "scripts": {
     "build": "cd server && yarn install --ignore-engines && yarn build && cd ../client && yarn install --ignore-engines && yarn build",
-    "start": "node server/newDist/index.js"
+    "start": "node server/newDist/server.js"
   }
 }
